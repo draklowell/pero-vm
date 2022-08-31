@@ -89,7 +89,7 @@ func (stack *Stack[T]) normalize() error {
 
 func (stack *Stack[T]) popBlock() error {
 	if stack.head.next == nil {
-		return ErrorStackEmpty
+		return ErrStackEmpty
 	}
 
 	stack.head = stack.head.next
@@ -99,7 +99,7 @@ func (stack *Stack[T]) popBlock() error {
 
 func (stack *Stack[T]) pushBlock() error {
 	if stack.size+1 > stack.maxSize {
-		return ErrorStackTooLarge
+		return ErrStackTooLarge
 	}
 
 	stack.head = &block[T]{

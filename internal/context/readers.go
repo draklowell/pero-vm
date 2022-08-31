@@ -13,7 +13,7 @@ func (ctx *Context) read(size int) ([]byte, error) {
 	}
 
 	if ctx.offset+size > len(ctx.bytecode) {
-		return nil, ErrorUnexpectedEnd
+		return nil, ErrUnexpectedEnd
 	}
 
 	for i := 0; i < size; i++ {
@@ -32,7 +32,7 @@ func (ctx *Context) seek(offset int) {
 func (ctx *Context) readCommand() (uint8, bool, error) {
 	commandBuffer, err := ctx.read(1)
 	if err != nil {
-		if errors.Is(err, ErrorUnexpectedEnd) {
+		if errors.Is(err, ErrUnexpectedEnd) {
 			return 0, true, nil
 		}
 		return 0, false, err
@@ -74,12 +74,12 @@ func (ctx *Context) readS4() (int32, error) {
 
 func (ctx *Context) getConstantWord(index uint16) (word.Word, error) {
 	if int(index) >= len(ctx.constants) {
-		return nil, &ErrorConstantNotFound{Index: index}
+		return nil, &ErrConstantNotFound{Index: index}
 	}
 	constant := ctx.constants[index]
 	value, ok := constant.(word.Word)
 	if !ok {
-		return nil, &ErrorInvalidConstantType{Index: index}
+		return nil, &ErrInvalidConstantType{Index: index}
 	}
 	return value, nil
 }
@@ -87,11 +87,11 @@ func (ctx *Context) getConstantWord(index uint16) (word.Word, error) {
 func (ctx *Context) getConstantString(index uint16) (string, error) {
 	constant := ctx.constants[index]
 	if constant == nil {
-		return "", &ErrorConstantNotFound{Index: index}
+		return "", &ErrConstantNotFound{Index: index}
 	}
 	value, ok := constant.(string)
 	if !ok {
-		return "", &ErrorInvalidConstantType{Index: index}
+		return "", &ErrInvalidConstantType{Index: index}
 	}
 	return value, nil
 }

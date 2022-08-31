@@ -4,8 +4,8 @@ import (
 	"fmt"
 )
 
-type ErrorEntryNotFound struct{ Entry string }
+type ErrEntryNotFound struct{ Entry string }
 
-func (e *ErrorEntryNotFound) Error() string {
-	return fmt.Sprintf("EntryNotFound: %s", e.Entry)
+func (e *ErrEntryNotFound) Error() string {
+	return fmt.Sprintf("entry \"%s\" not found", e.Entry)
 }

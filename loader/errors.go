@@ -5,45 +5,45 @@ import (
 	"fmt"
 )
 
-type ErrorUnknownConstantTag struct{ Tag uint8 }
+type ErrUnknownConstantTag struct{ Tag uint8 }
 
-func (e *ErrorUnknownConstantTag) Error() string {
-	return fmt.Sprintf("UnknownConstantTag: %d", e.Tag)
+func (e *ErrUnknownConstantTag) Error() string {
+	return fmt.Sprintf("unknown constant tag @%d", e.Tag)
 }
 
-type ErrorUnknownWordTag struct{ Tag uint8 }
+type ErrUnknownWordTag struct{ Tag uint8 }
 
-func (e *ErrorUnknownWordTag) Error() string {
-	return fmt.Sprintf("UnknownWordTag: %d", e.Tag)
+func (e *ErrUnknownWordTag) Error() string {
+	return fmt.Sprintf("unknown word tag @%d", e.Tag)
 }
 
-type ErrorInvalidMagicNumber struct{ Number []byte }
+type ErrInvalidMagicNumber struct{ Number []byte }
 
-func (e *ErrorInvalidMagicNumber) Error() string {
-	return fmt.Sprintf("InvalidMagicNumber: %X", e.Number)
+func (e *ErrInvalidMagicNumber) Error() string {
+	return fmt.Sprintf("invalid magic number %X", e.Number)
 }
 
-type ErrorUnexpectedEOF struct{ Base error }
+type ErrUnexpectedEOF struct{ Base error }
 
-func (e *ErrorUnexpectedEOF) Unwrap() error {
+func (e *ErrUnexpectedEOF) Unwrap() error {
 	return e.Base
 }
 
-func (e *ErrorUnexpectedEOF) Error() string {
-	return "UnexpectedEOF"
+func (e *ErrUnexpectedEOF) Error() string {
+	return "unexpected EOF"
 }
 
-type ErrorIOError struct{ Base error }
+type ErrIOError struct{ Base error }
 
-func (e *ErrorIOError) Unwrap() error {
+func (e *ErrIOError) Unwrap() error {
 	return e.Base
 }
 
-func (e *ErrorIOError) Error() string {
-	return fmt.Sprintf("IOError[%s]", e.Base.Error())
+func (e *ErrIOError) Error() string {
+	return fmt.Sprintf("IOError %s", e.Base.Error())
 }
 
 var (
-	ErrorInvalidVersion     = errors.New("InvalidVersion")
-	ErrorInvalidEntryLength = errors.New("InvalidEntryLength")
+	ErrInvalidVersion     = errors.New("invalid version")
+	ErrInvalidEntryLength = errors.New("invalid entry length")
 )

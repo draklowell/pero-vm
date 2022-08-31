@@ -43,7 +43,7 @@ func (dl *DynamicLoader) GetRoutine(entry string) (binary.ByteOrder, []byte, []c
 
 		if routine != nil {
 			if routine.Entry != entry {
-				return nil, nil, nil, nil, "", ErrorInvalidEntry
+				return nil, nil, nil, nil, "", ErrInvalidEntry
 			}
 			return routine.Order, routine.Bytecode, routine.Constants, routine.LineMap, routine.Entry, nil
 		}
@@ -58,7 +58,7 @@ func (dl *DynamicLoader) AddLoader(loader Loader) (int, error) {
 			return i, nil
 		}
 	}
-	return 0, ErrorLoaderLimitExceeded
+	return 0, ErrLoaderLimitExceeded
 }
 
 func (dl *DynamicLoader) RemoveLoader(index int) {

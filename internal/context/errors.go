@@ -5,45 +5,44 @@ import (
 	"fmt"
 )
 
-type ErrorInvalidConstantType struct{ Index uint16 }
+type ErrInvalidConstantType struct{ Index uint16 }
 
-func (e *ErrorInvalidConstantType) Error() string {
-	return fmt.Sprintf("InvalidConstantType: %d", e.Index)
+func (e *ErrInvalidConstantType) Error() string {
+	return fmt.Sprintf("constant type @%d invalid", e.Index)
 }
 
-type ErrorConstantNotFound struct{ Index uint16 }
+type ErrConstantNotFound struct{ Index uint16 }
 
-func (e *ErrorConstantNotFound) Error() string {
-	return fmt.Sprintf("ConstantNotFound: %d", e.Index)
+func (e *ErrConstantNotFound) Error() string {
+	return fmt.Sprintf("constant #%d not found", e.Index)
 }
 
-type ErrorTraceBack struct {
+type ErrTraceBack struct {
 	Base   error
 	Caller string
 	Line   int
 }
 
-func (e *ErrorTraceBack) Unwrap() error {
+func (e *ErrTraceBack) Unwrap() error {
 	return e.Base
 }
 
-func (e *ErrorTraceBack) Minimal() string {
+func (e *ErrTraceBack) Minimal() string {
 	baseText := e.Base.Error()
-	if trace, ok := e.Base.(*ErrorTraceBack); ok {
+	if trace, ok := e.Base.(*ErrTraceBack); ok {
 		baseText = trace.Minimal()
 	}
 	return fmt.Sprintf("%s:%d\n%s", e.Caller, e.Line, baseText)
 }
 
-func (e *ErrorTraceBack) Error() string {
+func (e *ErrTraceBack) Error() string {
 	return e.Minimal()
 }
 
 var (
-	ErrorContextFinished    = errors.New("ContextFinishedError")
-	ErrorContextBroken      = errors.New("ContextBroken")
-	ErrorContextNotFinished = errors.New("ContextNotFinishedError")
-	ErrorInvalidWordType    = errors.New("InvalidWordType")
-	ErrorInvalidIndex       = errors.New("InvalidIndex")
-	ErrorUnexpectedEnd      = errors.New("UnexpectedEnd")
+	ErrContextFinished    = errors.New("context finished")
+	ErrContextBroken      = errors.New("context broken")
+	ErrContextNotFinished = errors.New("context not finished yet")
+	ErrInvalidWordType    = errors.New("invalid word type")
+	ErrUnexpectedEnd      = errors.New("unexpected bytecode end")
 )

@@ -35,7 +35,7 @@ func (machine *Machine) Execute(caller string, entry string, arguments []word.Wo
 		return nil, err
 	}
 	if ret == nil {
-		return nil, &ErrorEntryNotFound{Entry: entry}
+		return nil, &ErrEntryNotFound{Entry: entry}
 	}
 
 	return ret, nil

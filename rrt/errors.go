@@ -12,21 +12,21 @@ type Unwrapable interface {
 	Unwrap() error
 }
 
-type ErrorExecution struct {
+type ErrExecution struct {
 	Base Unwrapable
 }
 
-func (e *ErrorExecution) Unwrap() error {
+func (e *ErrExecution) Unwrap() error {
 	return e.Base
 }
 
-func (e *ErrorExecution) InvokeBackTrace() ([]BackTraceElement, error) {
+func (e *ErrExecution) InvokeBackTrace() ([]BackTraceElement, error) {
 	trace := make([]BackTraceElement, 0)
 
 	var current Unwrapable = e
 	for {
 		unwraped := current.Unwrap()
-		if err, ok := unwraped.(*context.ErrorTraceBack); ok {
+		if err, ok := unwraped.(*context.ErrTraceBack); ok {
 			trace = append(trace, BackTraceElement{
 				Entry: err.Caller,
 				Line:  err.Line,
@@ -42,7 +42,7 @@ func (e *ErrorExecution) InvokeBackTrace() ([]BackTraceElement, error) {
 	return trace, current.Unwrap()
 }
 
-func (e *ErrorExecution) Error() string {
+func (e *ErrExecution) Error() string {
 	trace, base := e.InvokeBackTrace()
 
 	result := base.Error()
@@ -60,6 +60,6 @@ type BackTraceElement struct {
 }
 
 var (
-	ErrorInvalidEntry        = errors.New("InvalidEntry")
-	ErrorLoaderLimitExceeded = errors.New("LoaderLimitExceeded")
+	ErrInvalidEntry        = errors.New("invalid entry")
+	ErrLoaderLimitExceeded = errors.New("loader limit exceeded")
 )

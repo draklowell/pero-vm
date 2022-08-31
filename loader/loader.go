@@ -24,7 +24,7 @@ func LoadRoutine(stream io.Reader) ([]byte, []context.Constant, map[int]int, str
 		return nil, nil, nil, "", nil, err
 	}
 	if version != Version {
-		return nil, nil, nil, "", nil, ErrorInvalidVersion
+		return nil, nil, nil, "", nil, ErrInvalidVersion
 	}
 
 	entry, err := loadEntry(reader)
@@ -32,7 +32,7 @@ func LoadRoutine(stream io.Reader) ([]byte, []context.Constant, map[int]int, str
 		return nil, nil, nil, "", nil, err
 	}
 	if entry == "" {
-		return nil, nil, nil, "", nil, ErrorInvalidEntryLength
+		return nil, nil, nil, "", nil, ErrInvalidEntryLength
 	}
 
 	constants, err := loadConstants(reader)

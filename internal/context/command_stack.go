@@ -1,5 +1,7 @@
 package context
 
+import "lab.draklowell.net/routine-runtime/word"
+
 func (ctx *Context) commandPushConstant() error {
 	index, err := ctx.readU2()
 	if err != nil {
@@ -19,11 +21,11 @@ func (ctx *Context) commandPushNone() error {
 }
 
 func (ctx *Context) commandPushIntegerStatic(value int64) error {
-	return ctx.stack.Push(value)
+	return ctx.stack.Push(word.NewInteger(value))
 }
 
 func (ctx *Context) commandPushFloatStatic(value float64) error {
-	return ctx.stack.Push(value)
+	return ctx.stack.Push(word.NewFloat(value))
 }
 
 func (ctx *Context) commandPushVariable() error {

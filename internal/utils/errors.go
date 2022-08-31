@@ -3,6 +3,6 @@ package utils
 import "errors"
 
 var (
-	ErrorStackTooLarge = errors.New("StackTooLarge")
-	ErrorStackEmpty    = errors.New("StackEmpty")
+	ErrStackTooLarge = errors.New("stack too large")
+	ErrStackEmpty    = errors.New("stack empty")
 )

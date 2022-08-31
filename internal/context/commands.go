@@ -35,10 +35,10 @@ const (
 	CommandArrayNew           = 29
 	CommandArrayLength        = 30
 	CommandArrayGet           = 31
-	CommandArrayGet1          = 32
+	CommandArrayGet0          = 32
 	CommandArrayGetm1         = 33
 	CommandArraySet           = 34
-	CommandArraySet1          = 35
+	CommandArraySet0          = 35
 	CommandArraySetm1         = 36
 	CommandCheckTypeNone      = 37
 	CommandCheckTypeInteger   = 38
@@ -117,16 +117,10 @@ func (ctx *Context) executeCommand(command uint8) error {
 		return ctx.commandArrayLength()
 	case CommandArrayGet:
 		return ctx.commandArrayGet()
-	case CommandArrayGet1:
-		return ctx.commandArrayGetStatic(1)
+	case CommandArrayGet0:
+		return ctx.commandArrayGetStatic(0)
 	case CommandArrayGetm1:
 		return ctx.commandArrayGetStatic(-1)
-	case CommandArraySet:
-		return ctx.commandArraySet()
-	case CommandArraySet1:
-		return ctx.commandArraySetStatic(1)
-	case CommandArraySetm1:
-		return ctx.commandArraySetStatic(-1)
 	case CommandCheckTypeNone:
 		return ctx.commandCheckTypeStatic(word.TypeNone)
 	case CommandCheckTypeInteger:

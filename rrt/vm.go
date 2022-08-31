@@ -12,19 +12,7 @@ import (
 const (
 	DefaultTraceSize = 16384
 	DefaultStackSize = 1024
-
-	VersionMajor = 1
-	VersionMinor = 0
-	VersionPatch = 0
 )
-
-func Version() string {
-	result := fmt.Sprintf("%d.%d", VersionMajor, VersionMinor)
-	if VersionPatch != 0 {
-		result += fmt.Sprintf(".%d", VersionPatch)
-	}
-	return result
-}
 
 type VirtualMachine struct {
 	name string
@@ -70,8 +58,8 @@ func NewVirtualMachine(name string, traceSize uint16, stackSize uint16) *Virtual
 func (vm *VirtualMachine) Invoke(entry string, arguments []word.Word) ([]word.Word, error) {
 	result, err := vm.machine.Execute(fmt.Sprintf("<VM:%s>", vm.name), entry, arguments)
 	if err != nil {
-		if traceErr, ok := err.(*context.ErrorTraceBack); ok {
-			return nil, &ErrorExecution{Base: traceErr}
+		if traceErr, ok := err.(*context.ErrTraceBack); ok {
+			return nil, &ErrExecution{Base: traceErr}
 		}
 		return nil, err
 	}

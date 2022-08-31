@@ -28,14 +28,14 @@ func detectOrder(reader *Reader) (binary.ByteOrder, error) {
 		order = binary.LittleEndian
 		detectedMagic = LittleEndianMagic
 	default:
-		return nil, &ErrorInvalidMagicNumber{Number: magic}
+		return nil, &ErrInvalidMagicNumber{Number: magic}
 	}
 
 	// Validating
 
 	for i, char := range magic {
 		if char != detectedMagic[i] {
-			return nil, &ErrorInvalidMagicNumber{Number: magic}
+			return nil, &ErrInvalidMagicNumber{Number: magic}
 		}
 	}
 	return order, nil

@@ -4,55 +4,55 @@ import (
 	"lab.draklowell.net/routine-runtime/word"
 )
 
-func (ctx *Context) popArray() ([]word.Word, error) {
+func (ctx *Context) popArray() (*word.Array, error) {
 	valueWord, err := ctx.stack.Pop()
 	if err != nil {
 		return nil, err
 	}
 
-	value, ok := valueWord.([]word.Word)
+	value, ok := valueWord.(*word.Array)
 	if !ok {
-		return nil, ErrorInvalidWordType
+		return nil, ErrInvalidWordType
 	}
 
 	return value, nil
 }
 
-func (ctx *Context) popContainer() (map[string]word.Word, error) {
+func (ctx *Context) popContainer() (*word.Container, error) {
 	valueWord, err := ctx.stack.Pop()
 	if err != nil {
 		return nil, err
 	}
 
-	value, ok := valueWord.(map[string]word.Word)
+	value, ok := valueWord.(*word.Container)
 	if !ok {
-		return nil, ErrorInvalidWordType
+		return nil, ErrInvalidWordType
 	}
 
 	return value, nil
 }
 
-func (ctx *Context) popInteger() (int64, error) {
+func (ctx *Context) popInteger() (*word.Integer, error) {
 	valueWord, err := ctx.stack.Pop()
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-	value, ok := valueWord.(int64)
+	value, ok := valueWord.(*word.Integer)
 	if !ok {
-		return 0, ErrorInvalidWordType
+		return nil, ErrInvalidWordType
 	}
 
 	return value, nil
 }
 
-func (ctx *Context) popFloat() (float64, error) {
+func (ctx *Context) popFloat() (*word.Float, error) {
 	valueWord, err := ctx.stack.Pop()
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-	value, ok := valueWord.(float64)
+	value, ok := valueWord.(*word.Float)
 	if !ok {
-		return 0, ErrorInvalidWordType
+		return nil, ErrInvalidWordType
 	}
 
 	return value, nil
@@ -62,12 +62,12 @@ func (ctx *Context) popString() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	value, ok := valueWord.([]uint8)
+	value, ok := valueWord.(*word.Bytes)
 	if !ok {
-		return "", ErrorInvalidWordType
+		return "", ErrInvalidWordType
 	}
 
-	return string(value), nil
+	return string(value.GetValue()), nil
 }
 
 var (

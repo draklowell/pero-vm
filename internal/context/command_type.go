@@ -8,11 +8,7 @@ func (ctx *Context) commandCheckTypeStatic(typ int) error {
 		return err
 	}
 
-	if word.GetType(value) == typ {
-		ctx.stack.Push(TRUE)
-	} else {
-		ctx.stack.Push(FALSE)
-	}
+	ctx.stack.Push(word.NewBoolean(value.GetType() == typ))
 
 	return nil
 }
@@ -23,7 +19,7 @@ func (ctx *Context) commandFloatToInteger() error {
 		return err
 	}
 
-	return ctx.stack.Push(int64(value))
+	return ctx.stack.Push(word.NewInteger(int64(value.GetValue())))
 }
 
 func (ctx *Context) commandIntegerToFloat() error {
@@ -32,5 +28,5 @@ func (ctx *Context) commandIntegerToFloat() error {
 		return err
 	}
 
-	return ctx.stack.Push(float64(value))
+	return ctx.stack.Push(word.NewFloat(float64(value.GetValue())))
 }

@@ -21,7 +21,7 @@ func (ctx *Context) commandArrayNew() error {
 		return err
 	}
 
-	return ctx.stack.Push(make([]word.Word, size))
+	return ctx.stack.Push(word.NewArray(int(size.GetValue())))
 }
 
 // array[array] -> length[int64]
@@ -31,21 +31,21 @@ func (ctx *Context) commandArrayLength() error {
 		return err
 	}
 
-	return ctx.stack.Push(int64(len(array)))
+	return ctx.stack.Push(word.NewInteger(int64(array.GetSize())))
 }
 
-func (ctx *Context) commandArrayGetStatic(index int64) error {
+func (ctx *Context) commandArrayGetStatic(index int) error {
 	array, err := ctx.popArray()
 	if err != nil {
 		return err
 	}
 
-	index = absoluteIndex(index, len(array))
-
-	if index > int64(len(array)) {
-		return ErrorInvalidIndex
+	value, err := array.Get(int(index))
+	if err != nil {
+		return err
 	}
-	return ctx.stack.Push(array[index])
+
+	return ctx.stack.Push(value)
 }
 
 // array[array], index[int64] -> element[any]
@@ -55,28 +55,5 @@ func (ctx *Context) commandArrayGet() error {
 		return err
 	}
 
-	return ctx.commandArrayGetStatic(index)
-}
-func (ctx *Context) commandArraySetStatic(index int64) error {
-	array, err := ctx.popArray()
-	if err != nil {
-		return err
-	}
-
-	index = absoluteIndex(index, len(array))
-
-	if index > int64(len(array)) {
-		return ErrorInvalidIndex
-	}
-	return ctx.stack.Push(array[index])
-}
-
-// array[array], index[int64] -> element[any]
-func (ctx *Context) commandArraySet() error {
-	index, err := ctx.popInteger()
-	if err != nil {
-		return err
-	}
-
-	return ctx.commandArraySetStatic(index)
+	return ctx.commandArrayGetStatic(int(index.GetValue()))
 }

@@ -59,7 +59,7 @@ func (ctx *Context) GetCaller() string {
 
 func (ctx *Context) ExecuteCommand() error {
 	if ctx.finished {
-		return ErrorContextFinished
+		return ErrContextFinished
 	}
 
 	command, finished, err := ctx.readCommand()
@@ -78,7 +78,7 @@ func (ctx *Context) Execute(breaker internal.BreakCallback) error {
 	for !ctx.IsFinished() && !breaker() {
 		err := ctx.ExecuteCommand()
 		if err != nil {
-			return &ErrorTraceBack{
+			return &ErrTraceBack{
 				Base:   err,
 				Caller: ctx.entry,
 				Line:   ctx.GetLine(),
@@ -95,9 +95,9 @@ func (ctx *Context) GetReturn() ([]word.Word, error) {
 	if ctx.finished {
 		return ctx.ret, nil
 	} else if ctx.broken {
-		return nil, ErrorContextBroken
+		return nil, ErrContextBroken
 	} else {
-		return nil, ErrorContextNotFinished
+		return nil, ErrContextNotFinished
 	}
 }
 

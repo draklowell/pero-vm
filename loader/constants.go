@@ -45,7 +45,7 @@ func loadConstant(reader *Reader) (context.Constant, error) {
 	case ConstantWord:
 		return loadConstantWord(reader)
 	}
-	return nil, &ErrorUnknownConstantTag{Tag: tag}
+	return nil, &ErrUnknownConstantTag{Tag: tag}
 }
 
 func loadConstantWord(reader *Reader) (word.Word, error) {
@@ -56,18 +56,31 @@ func loadConstantWord(reader *Reader) (word.Word, error) {
 
 	switch tag {
 	case word.TypeInteger:
-		return reader.ReadS8()
+		value, err := reader.ReadS8()
+		if err != nil {
+			return nil, err
+		}
+		return word.NewInteger(value), nil
 	case word.TypeFloat:
-		return reader.ReadF8()
+		value, err := reader.ReadF8()
+		if err != nil {
+			return nil, err
+		}
+		return word.NewFloat(value), nil
 	case word.TypeBytes:
 		length, err := reader.ReadS4()
 		if err != nil {
 			return nil, err
 		}
 
-		return reader.Read(int(length))
+		value, err := reader.Read(int(length))
+		if err != nil {
+			return nil, err
+		}
+
+		return word.NewBytes(value)
 	case word.TypeNone:
 		return nil, nil
 	}
-	return nil, &ErrorUnknownWordTag{Tag: tag}
+	return nil, &ErrUnknownWordTag{Tag: tag}
 }

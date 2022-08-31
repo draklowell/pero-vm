@@ -28,12 +28,12 @@ func (reader *Reader) Read(size int) ([]byte, error) {
 	n, err := reader.base.Read(buffer)
 	if err != nil {
 		if errors.Is(err, io.EOF) {
-			return nil, &ErrorUnexpectedEOF{Base: err}
+			return nil, &ErrUnexpectedEOF{Base: err}
 		}
-		return nil, &ErrorIOError{Base: err}
+		return nil, &ErrIOError{Base: err}
 	}
 	if n != size {
-		return nil, &ErrorUnexpectedEOF{Base: io.EOF}
+		return nil, &ErrUnexpectedEOF{Base: io.EOF}
 	}
 	return buffer, nil
 }
