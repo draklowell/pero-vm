@@ -1,0 +1,84 @@
+package rrt
+
+import (
+	"fmt"
+
+	"lab.draklowell.net/routine-runtime/contrib"
+	"lab.draklowell.net/routine-runtime/internal"
+	"lab.draklowell.net/routine-runtime/internal/context"
+	"lab.draklowell.net/routine-runtime/word"
+)
+
+const (
+	DefaultTraceSize = 16384
+	DefaultStackSize = 1024
+
+	VersionMajor = 1
+	VersionMinor = 0
+	VersionPatch = 0
+)
+
+func Version() string {
+	result := fmt.Sprintf("%d.%d", VersionMajor, VersionMinor)
+	if VersionPatch != 0 {
+		result += fmt.Sprintf(".%d", VersionPatch)
+	}
+	return result
+}
+
+type VirtualMachine struct {
+	name string
+
+	finder  *contrib.ComplexFinder
+	machine internal.Machine
+
+	nativeFinder  *contrib.NativeFinder
+	staticLoader  *contrib.CachedLoader
+	staticFinder  *contrib.ContextFinder
+	dynamicLoader *DynamicLoader
+	dynamicFinder *contrib.ContextFinder
+}
+
+func NewVirtualMachine(name string, traceSize uint16, stackSize uint16) *VirtualMachine {
+	nativeFinder := contrib.NewNativeFinder(map[string]contrib.NativeRoutine{})
+
+	staticLoader := &contrib.CachedLoader{
+		Routines: map[string]*contrib.CachedRoutine{},
+	}
+	staticFinder := contrib.NewContextFinder(staticLoader)
+
+	dynamicLoader := NewDynamicLoader()
+	dynamicFinder := contrib.NewContextFinder(dynamicLoader)
+
+	finder := contrib.NewComplexFinder([]internal.ModuleFinder{
+		nativeFinder,
+		staticFinder,
+		dynamicFinder,
+	})
+	return &VirtualMachine{
+		name:          name,
+		finder:        finder,
+		machine:       *internal.NewMachine(finder, traceSize, stackSize),
+		nativeFinder:  nativeFinder,
+		staticLoader:  staticLoader,
+		staticFinder:  staticFinder,
+		dynamicLoader: dynamicLoader,
+		dynamicFinder: dynamicFinder,
+	}
+}
+
+func (vm *VirtualMachine) Invoke(entry string, arguments []word.Word) ([]word.Word, error) {
+	result, err := vm.machine.Execute(fmt.Sprintf("<VM:%s>", vm.name), entry, arguments)
+	if err != nil {
+		if traceErr, ok := err.(*context.ErrorTraceBack); ok {
+			return nil, &ErrorExecution{Base: traceErr}
+		}
+		return nil, err
+	}
+	return result, nil
+}
+
+func (vm *VirtualMachine) RemoveRoutine(entry string) {
+	vm.nativeFinder.SetRoutine(entry, nil)
+	vm.staticLoader.Routines[entry] = nil
+}
