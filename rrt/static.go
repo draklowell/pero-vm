@@ -1,14 +1,14 @@
 package rrt
 
 import (
-	"io"
+	"bytes"
 
 	"lab.draklowell.net/routine-runtime/contrib"
 	"lab.draklowell.net/routine-runtime/loader"
 )
 
-func (vm *VirtualMachine) AddStaticRoutine(stream io.Reader) (string, error) {
-	bytecode, constants, lineMap, entry, order, err := loader.LoadRoutine(stream)
+func (vm *VirtualMachine) AddStaticRoutine(data []byte) (string, error) {
+	bytecode, constants, lineMap, entry, order, err := loader.LoadRoutine(bytes.NewReader(data))
 	if err != nil {
 		return "", err
 	}

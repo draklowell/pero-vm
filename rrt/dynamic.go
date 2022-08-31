@@ -14,7 +14,7 @@ type Loader interface {
 
 type DynamicRoutine struct {
 	Order     binary.ByteOrder
-	Reader    []byte
+	Bytecode  []byte
 	Constants []context.Constant
 	LineMap   map[int]int
 	Entry     string
@@ -45,7 +45,7 @@ func (dl *DynamicLoader) GetRoutine(entry string) (binary.ByteOrder, []byte, []c
 			if routine.Entry != entry {
 				return nil, nil, nil, nil, "", ErrorInvalidEntry
 			}
-			return routine.Order, routine.Reader, routine.Constants, routine.LineMap, routine.Entry, nil
+			return routine.Order, routine.Bytecode, routine.Constants, routine.LineMap, routine.Entry, nil
 		}
 	}
 	return nil, nil, nil, nil, "", nil
@@ -81,7 +81,7 @@ func LoadDynamicRoutine(reader io.Reader) (*DynamicRoutine, error) {
 
 	return &DynamicRoutine{
 		Order:     order,
-		Reader:    bytecode,
+		Bytecode:  bytecode,
 		Constants: constants,
 		LineMap:   lineMap,
 		Entry:     realEntry,
