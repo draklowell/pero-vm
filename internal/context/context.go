@@ -4,14 +4,13 @@ import (
 	"encoding/binary"
 
 	"lab.draklowell.net/routine-runtime/internal"
-	"lab.draklowell.net/routine-runtime/internal/utils"
 	"lab.draklowell.net/routine-runtime/word"
 )
 
 type Constant interface{}
 
 type Context struct {
-	stack *utils.Stack[word.Word]
+	stack *Stack
 
 	bytecode  []byte
 	offset    int
@@ -32,7 +31,7 @@ type Context struct {
 func NewContext(machine *internal.Machine, order binary.ByteOrder, bytecode []byte, constants []Constant, lineMap map[int]int, entry string) *Context {
 	return &Context{
 		machine:   machine,
-		stack:     utils.NewStack[word.Word](machine.StackSize),
+		stack:     NewStack(machine.StackSize),
 		bytecode:  bytecode,
 		constants: constants,
 		variables: make([]word.Word, 256),
@@ -43,7 +42,7 @@ func NewContext(machine *internal.Machine, order binary.ByteOrder, bytecode []by
 }
 
 func (ctx *Context) GetLine() int {
-	byteIndex := ctx.offset
+	byteIndex := ctx.offset - 1
 	for byteIndex >= 0 {
 		if ctx.lineMap[byteIndex] != 0 {
 			return ctx.lineMap[byteIndex]

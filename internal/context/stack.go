@@ -1,23 +1,25 @@
-package utils
+package context
+
+import "lab.draklowell.net/routine-runtime/word"
 
 const (
 	defaultStackSize = 1024
 	defaultBlockSize = 1024
 )
 
-type Stack[T interface{} | struct{}] struct {
-	head      *block[T]
+type Stack struct {
+	head      *block
 	size      uint16
 	maxSize   uint16
 	blockSize uint16
 }
 
-func NewStack[T interface{} | struct{}](stackSize uint16) *Stack[T] {
+func NewStack(stackSize uint16) *Stack {
 	if stackSize == 0 {
 		stackSize = defaultStackSize
 	}
 
-	stack := &Stack[T]{
+	stack := &Stack{
 		maxSize:   stackSize,
 		blockSize: defaultBlockSize,
 	}
@@ -25,7 +27,7 @@ func NewStack[T interface{} | struct{}](stackSize uint16) *Stack[T] {
 	return stack
 }
 
-func (stack *Stack[T]) Clear() error {
+func (stack *Stack) Clear() error {
 	for stack.size > 1 {
 		err := stack.popBlock()
 		if err != nil {
@@ -35,8 +37,8 @@ func (stack *Stack[T]) Clear() error {
 	return nil
 }
 
-func (stack *Stack[T]) Dump() []T {
-	result := make([]T, 0, stack.size*stack.blockSize)
+func (stack *Stack) Dump() []word.Word {
+	result := make([]word.Word, 0, stack.size*stack.blockSize)
 	b := stack.head
 	for b.next != nil {
 		result = append(result, b.Dump()...)
@@ -45,7 +47,7 @@ func (stack *Stack[T]) Dump() []T {
 	return result
 }
 
-func (stack *Stack[T]) Pop() (T, error) {
+func (stack *Stack) Pop() (word.Word, error) {
 	value, err := stack.Fetch()
 	if err != nil {
 		return value, err
@@ -55,9 +57,9 @@ func (stack *Stack[T]) Pop() (T, error) {
 	return value, nil
 }
 
-func (stack *Stack[T]) Fetch() (T, error) {
+func (stack *Stack) Fetch() (word.Word, error) {
 	if err := stack.normalize(); err != nil {
-		var result T
+		var result word.Word
 		return result, err
 	}
 
@@ -65,7 +67,7 @@ func (stack *Stack[T]) Fetch() (T, error) {
 	return value, nil
 }
 
-func (stack *Stack[T]) Push(element T) error {
+func (stack *Stack) Push(element word.Word) error {
 	if stack.head.index+1 >= len(stack.head.data) {
 		if err := stack.pushBlock(); err != nil {
 			return err
@@ -77,7 +79,7 @@ func (stack *Stack[T]) Push(element T) error {
 	return nil
 }
 
-func (stack *Stack[T]) normalize() error {
+func (stack *Stack) normalize() error {
 	if stack.head.index < 0 {
 		if err := stack.popBlock(); err != nil {
 			return err
@@ -87,7 +89,7 @@ func (stack *Stack[T]) normalize() error {
 	return nil
 }
 
-func (stack *Stack[T]) popBlock() error {
+func (stack *Stack) popBlock() error {
 	if stack.head.next == nil {
 		return ErrStackEmpty
 	}
@@ -97,28 +99,28 @@ func (stack *Stack[T]) popBlock() error {
 	return nil
 }
 
-func (stack *Stack[T]) pushBlock() error {
+func (stack *Stack) pushBlock() error {
 	if stack.size+1 > stack.maxSize {
 		return ErrStackTooLarge
 	}
 
-	stack.head = &block[T]{
+	stack.head = &block{
 		index: -1,
 		next:  stack.head,
-		data:  make([]T, stack.blockSize),
+		data:  make([]word.Word, stack.blockSize),
 	}
 	stack.size++
 	return nil
 }
 
-type block[T interface{} | struct{}] struct {
+type block struct {
 	index int
-	data  []T
-	next  *block[T]
+	data  []word.Word
+	next  *block
 }
 
-func (b *block[T]) Dump() []T {
-	result := make([]T, 0, len(b.data))
+func (b *block) Dump() []word.Word {
+	result := make([]word.Word, 0, len(b.data))
 	index := b.index
 	for index >= 0 {
 		result = append(result, b.data[index])

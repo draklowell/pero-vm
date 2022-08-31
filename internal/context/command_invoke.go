@@ -29,8 +29,9 @@ func (ctx *Context) commandInvokeCollectReturn(ret []word.Word, retCount uint8) 
 		var value word.Word
 		if len(ret) > int(i) {
 			value = ret[i]
-		} else {
-			value = nil
+		}
+		if value == nil {
+			value = word.None
 		}
 		err := ctx.stack.Push(value)
 		if err != nil {

@@ -45,4 +45,6 @@ var (
 	ErrContextNotFinished = errors.New("context not finished yet")
 	ErrInvalidWordType    = errors.New("invalid word type")
 	ErrUnexpectedEnd      = errors.New("unexpected bytecode end")
+	ErrStackTooLarge      = errors.New("stack too large")
+	ErrStackEmpty         = errors.New("stack empty")
 )
