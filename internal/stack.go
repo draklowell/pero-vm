@@ -118,6 +118,10 @@ func (stack *Stack) push(element word.Word) error {
 		}
 	}
 
+	if stack.getSize() > stack.sizeLimit {
+		return ErrStackTooLarge
+	}
+
 	stack.head.index++
 	stack.head.data[stack.head.index] = element
 	return nil
@@ -144,11 +148,6 @@ func (stack *Stack) popBlock() error {
 }
 
 func (stack *Stack) pushBlock() error {
-	value := stack.getSize() + uint(stack.blockSize)
-	if value > stack.sizeLimit {
-		return ErrStackTooLarge
-	}
-
 	stack.head = &block{
 		index: -1,
 		next:  stack.head,
@@ -159,7 +158,7 @@ func (stack *Stack) pushBlock() error {
 }
 
 func (stack *Stack) getSize() uint {
-	return uint(stack.size) * uint(stack.blockSize)
+	return uint(stack.size-1)*uint(stack.blockSize) + uint(stack.head.index+1)
 }
 
 type block struct {
