@@ -3,7 +3,7 @@ package internal
 import (
 	"runtime"
 
-	"lab.draklowell.net/routine-runtime/internal/word"
+	"lab.draklowell.net/routine-runtime/common/word"
 )
 
 type Heap struct {

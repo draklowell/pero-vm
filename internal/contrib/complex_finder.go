@@ -1,8 +1,8 @@
 package contrib
 
 import (
+	"lab.draklowell.net/routine-runtime/common/word"
 	"lab.draklowell.net/routine-runtime/internal"
-	"lab.draklowell.net/routine-runtime/internal/word"
 )
 
 type ComplexFinder struct {

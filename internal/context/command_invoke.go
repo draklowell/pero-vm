@@ -1,6 +1,6 @@
 package context
 
-import "lab.draklowell.net/routine-runtime/internal/word"
+import "lab.draklowell.net/routine-runtime/common/word"
 
 func (ctx *Context) commandInvokeCollectArguments() ([]word.Word, uint8, error) {
 	argumentsCount, err := ctx.readU1()

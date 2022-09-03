@@ -1,7 +1,7 @@
 package main
 
 import (
-	"lab.draklowell.net/routine-runtime/internal/word"
+	"lab.draklowell.net/routine-runtime/common/word"
 	"lab.draklowell.net/routine-runtime/rrt"
 )
 

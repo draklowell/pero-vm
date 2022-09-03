@@ -1,6 +1,6 @@
 package main
 
-import "lab.draklowell.net/routine-runtime/internal/word"
+import "lab.draklowell.net/routine-runtime/common/word"
 
 import "C"
 

@@ -1,7 +1,7 @@
 package context
 
 import (
-	"lab.draklowell.net/routine-runtime/internal/word"
+	"lab.draklowell.net/routine-runtime/common/word"
 )
 
 func (ctx *Context) popArray() (*word.Array, error) {

@@ -1,6 +1,6 @@
 package context
 
-import "lab.draklowell.net/routine-runtime/internal/word"
+import "lab.draklowell.net/routine-runtime/common/word"
 
 func (ctx *Context) commandPushConstant() error {
 	index, err := ctx.readU2()

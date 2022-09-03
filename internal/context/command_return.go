@@ -1,6 +1,6 @@
 package context
 
-import "lab.draklowell.net/routine-runtime/internal/word"
+import "lab.draklowell.net/routine-runtime/common/word"
 
 func (ctx *Context) commandReturnStatic(retCount int) error {
 	result := make([]word.Word, retCount)

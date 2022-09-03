@@ -3,10 +3,10 @@ package rrt
 import (
 	"fmt"
 
+	"lab.draklowell.net/routine-runtime/common/word"
 	"lab.draklowell.net/routine-runtime/internal"
 	"lab.draklowell.net/routine-runtime/internal/context"
 	"lab.draklowell.net/routine-runtime/internal/contrib"
-	"lab.draklowell.net/routine-runtime/internal/word"
 )
 
 type VirtualMachine struct {

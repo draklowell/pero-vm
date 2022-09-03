@@ -3,8 +3,8 @@ package context
 import (
 	"encoding/binary"
 
+	"lab.draklowell.net/routine-runtime/common/word"
 	"lab.draklowell.net/routine-runtime/internal"
-	"lab.draklowell.net/routine-runtime/internal/word"
 )
 
 type Constant interface{}
