@@ -3,10 +3,10 @@ package rrt
 import (
 	"fmt"
 
-	"lab.draklowell.net/routine-runtime/contrib"
 	"lab.draklowell.net/routine-runtime/internal"
 	"lab.draklowell.net/routine-runtime/internal/context"
-	"lab.draklowell.net/routine-runtime/word"
+	"lab.draklowell.net/routine-runtime/internal/contrib"
+	"lab.draklowell.net/routine-runtime/internal/word"
 )
 
 const (
@@ -21,7 +21,7 @@ type VirtualMachine struct {
 	machine internal.Machine
 
 	nativeFinder  *contrib.NativeFinder
-	staticLoader  *contrib.CachedLoader
+	staticLoader  *contrib.StaticLoader
 	staticFinder  *contrib.ContextFinder
 	dynamicLoader *DynamicLoader
 	dynamicFinder *contrib.ContextFinder
@@ -30,8 +30,8 @@ type VirtualMachine struct {
 func NewVirtualMachine(name string, traceSize uint16, stackSize uint16) *VirtualMachine {
 	nativeFinder := contrib.NewNativeFinder(map[string]contrib.NativeRoutine{})
 
-	staticLoader := &contrib.CachedLoader{
-		Routines: map[string]*contrib.CachedRoutine{},
+	staticLoader := &contrib.StaticLoader{
+		Routines: map[string]*contrib.StaticRoutine{},
 	}
 	staticFinder := contrib.NewContextFinder(staticLoader)
 

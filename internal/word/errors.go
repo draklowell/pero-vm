@@ -6,4 +6,5 @@ var (
 	ErrInvalidIndex = errors.New("invalid array index")
 	ErrInvalidKey   = errors.New("invalid container key")
 	ErrNilPointer   = errors.New("unexpected nil pointer")
+	ErrUnsafeString = errors.New("unsafe string")
 )

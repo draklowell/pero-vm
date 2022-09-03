@@ -1,20 +1,9 @@
 package context
 
 import (
-	"lab.draklowell.net/routine-runtime/word"
+	"lab.draklowell.net/routine-runtime/internal/word"
 )
 
-func absoluteIndex(x int64, length int) int64 {
-	if x < 0 {
-		x = int64(length) - x - 1
-	}
-	if x < 0 {
-		return int64(length) // Remake pls :D
-	}
-	return x
-}
-
-// -> array[array]
 func (ctx *Context) commandArrayNew() error {
 	size, err := ctx.popInteger()
 	if err != nil {
@@ -24,7 +13,6 @@ func (ctx *Context) commandArrayNew() error {
 	return ctx.stack.Push(word.NewArray(int(size.GetValue())))
 }
 
-// array[array] -> length[int64]
 func (ctx *Context) commandArrayLength() error {
 	array, err := ctx.popArray()
 	if err != nil {
@@ -48,7 +36,6 @@ func (ctx *Context) commandArrayGetStatic(index int) error {
 	return ctx.stack.Push(value)
 }
 
-// array[array], index[int64] -> element[any]
 func (ctx *Context) commandArrayGet() error {
 	index, err := ctx.popInteger()
 	if err != nil {
@@ -56,4 +43,47 @@ func (ctx *Context) commandArrayGet() error {
 	}
 
 	return ctx.commandArrayGetStatic(int(index.GetValue()))
+}
+
+func (ctx *Context) commandArraySetStatic(index int) error {
+	value, err := ctx.stack.Pop()
+	if err != nil {
+		return err
+	}
+
+	array, err := ctx.popArray()
+	if err != nil {
+		return err
+	}
+
+	err = array.Set(int(index), value)
+	if err != nil {
+		return err
+	}
+
+	return ctx.stack.Push(value)
+}
+
+func (ctx *Context) commandArraySet() error {
+	value, err := ctx.stack.Pop()
+	if err != nil {
+		return err
+	}
+
+	index, err := ctx.popInteger()
+	if err != nil {
+		return err
+	}
+
+	array, err := ctx.popArray()
+	if err != nil {
+		return err
+	}
+
+	err = array.Set(int(index.GetValue()), value)
+	if err != nil {
+		return err
+	}
+
+	return ctx.stack.Push(value)
 }

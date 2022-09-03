@@ -3,7 +3,7 @@ package rrt
 import (
 	"bytes"
 
-	"lab.draklowell.net/routine-runtime/contrib"
+	"lab.draklowell.net/routine-runtime/internal/contrib"
 	"lab.draklowell.net/routine-runtime/loader"
 )
 
@@ -13,7 +13,7 @@ func (vm *VirtualMachine) AddStaticRoutine(data []byte) (string, error) {
 		return "", err
 	}
 
-	vm.staticLoader.Routines[entry] = &contrib.CachedRoutine{
+	vm.staticLoader.Routines[entry] = &contrib.StaticRoutine{
 		Bytecode:  bytecode,
 		Constants: constants,
 		LineMap:   lineMap,

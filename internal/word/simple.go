@@ -57,14 +57,18 @@ func (none *NoneType) GetType() int {
 	return TypeNone
 }
 
-var None Word = &NoneType{}
+var None *NoneType = &NoneType{}
 
 type Boolean struct {
 	value bool
 }
 
 func NewBoolean(value bool) *Boolean {
-	return &Boolean{value: value}
+	if value {
+		return True
+	} else {
+		return False
+	}
 }
 
 func (word *Boolean) GetType() int {
@@ -74,3 +78,8 @@ func (word *Boolean) GetType() int {
 func (word *Boolean) GetValue() bool {
 	return word.value
 }
+
+var (
+	True  *Boolean = &Boolean{true}
+	False *Boolean = &Boolean{false}
+)

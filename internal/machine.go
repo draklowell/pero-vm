@@ -1,7 +1,9 @@
 package internal
 
 import (
-	"lab.draklowell.net/routine-runtime/word"
+	"strings"
+
+	"lab.draklowell.net/routine-runtime/internal/word"
 )
 
 type BreakCallback func() bool
@@ -30,6 +32,10 @@ func NewMachine(finder ModuleFinder, traceSize uint16, stackSize uint16) *Machin
 }
 
 func (machine *Machine) Execute(caller string, entry string, arguments []word.Word) ([]word.Word, error) {
+	if strings.ContainsRune(entry, 0) {
+		return nil, &ErrEntryNotFound{Entry: entry}
+	}
+
 	ret, err := machine.finder.Execute(machine, entry, arguments)
 	if err != nil {
 		return nil, err

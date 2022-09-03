@@ -1,6 +1,6 @@
 package context
 
-import "lab.draklowell.net/routine-runtime/word"
+import "lab.draklowell.net/routine-runtime/internal/word"
 
 const (
 	defaultStackSize = 1024

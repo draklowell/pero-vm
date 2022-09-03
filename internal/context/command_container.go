@@ -1,21 +1,12 @@
 package context
 
-func (ctx *Context) commandPutFieldStatic(key string) error {
-	container, err := ctx.popContainer()
-	if err != nil {
-		return err
-	}
+import "lab.draklowell.net/routine-runtime/internal/word"
 
-	value, err := ctx.stack.Pop()
-	if err != nil {
-		return err
-	}
-	container.Set(key, value)
-
-	return nil
+func (ctx *Context) commandContainerNew() error {
+	return ctx.stack.Push(word.NewContainer())
 }
 
-func (ctx *Context) commandPutField() error {
+func (ctx *Context) commandContainerPut() error {
 	keyIndex, err := ctx.readU2()
 	if err != nil {
 		return err
@@ -25,14 +16,101 @@ func (ctx *Context) commandPutField() error {
 	if err != nil {
 		return err
 	}
-	return ctx.commandPutFieldStatic(key)
+
+	value, err := ctx.stack.Pop()
+	if err != nil {
+		return err
+	}
+
+	container, err := ctx.popContainer()
+	if err != nil {
+		return err
+	}
+
+	return container.Set(key, value)
 }
 
-func (ctx *Context) commandPutFieldDynamic() error {
+func (ctx *Context) commandContainerPutDynamic() error {
+	value, err := ctx.stack.Pop()
+	if err != nil {
+		return err
+	}
+
 	key, err := ctx.popString()
 	if err != nil {
 		return err
 	}
 
-	return ctx.commandPutFieldStatic(key)
+	container, err := ctx.popContainer()
+	if err != nil {
+		return err
+	}
+
+	container.Set(key, value)
+	return nil
+}
+
+func (ctx *Context) commandContainerGet() error {
+	keyIndex, err := ctx.readU2()
+	if err != nil {
+		return err
+	}
+
+	key, err := ctx.getConstantString(keyIndex)
+	if err != nil {
+		return err
+	}
+
+	container, err := ctx.popContainer()
+	if err != nil {
+		return err
+	}
+
+	value, err := container.Get(key)
+	if err != nil {
+		return err
+	}
+
+	ctx.stack.Push(value)
+	return nil
+}
+
+func (ctx *Context) commandContainerGetDynamic() error {
+	key, err := ctx.popString()
+	if err != nil {
+		return err
+	}
+
+	container, err := ctx.popContainer()
+	if err != nil {
+		return err
+	}
+
+	value, err := container.Get(key)
+	if err != nil {
+		return err
+	}
+
+	ctx.stack.Push(value)
+	return nil
+}
+
+func (ctx *Context) commandContainerKeys() error {
+	container, err := ctx.popContainer()
+	if err != nil {
+		return err
+	}
+
+	keys := container.GetKeys()
+	result := word.NewArray(len(keys))
+	for i, key := range keys {
+		value, err := word.NewBytes([]byte(key))
+		if err != nil {
+			return err
+		}
+		result.Set(i, value)
+	}
+
+	ctx.stack.Push(result)
+	return nil
 }

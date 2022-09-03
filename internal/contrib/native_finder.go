@@ -2,7 +2,7 @@ package contrib
 
 import (
 	"lab.draklowell.net/routine-runtime/internal"
-	"lab.draklowell.net/routine-runtime/word"
+	"lab.draklowell.net/routine-runtime/internal/word"
 )
 
 type NativeRoutine interface {

@@ -1,7 +1,7 @@
 package context
 
 import (
-	"lab.draklowell.net/routine-runtime/word"
+	"lab.draklowell.net/routine-runtime/internal/word"
 )
 
 func (ctx *Context) popArray() (*word.Array, error) {
@@ -57,6 +57,7 @@ func (ctx *Context) popFloat() (*word.Float, error) {
 
 	return value, nil
 }
+
 func (ctx *Context) popString() (string, error) {
 	valueWord, err := ctx.stack.Pop()
 	if err != nil {
@@ -68,6 +69,19 @@ func (ctx *Context) popString() (string, error) {
 	}
 
 	return string(value.GetValue()), nil
+}
+
+func (ctx *Context) popBoolean() (bool, error) {
+	valueWord, err := ctx.stack.Pop()
+	if err != nil {
+		return false, err
+	}
+	value, ok := valueWord.(*word.Boolean)
+	if !ok {
+		return false, ErrInvalidWordType
+	}
+
+	return value.GetValue(), nil
 }
 
 var (

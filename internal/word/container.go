@@ -1,5 +1,7 @@
 package word
 
+import "strings"
+
 type Container struct {
 	value map[string]Word
 }
@@ -23,8 +25,12 @@ func (word *Container) Get(key string) (Word, error) {
 	return value, nil
 }
 
-func (word *Container) Set(key string, value Word) {
+func (word *Container) Set(key string, value Word) error {
+	if strings.ContainsRune(key, 0) {
+		return ErrUnsafeString
+	}
 	word.value[key] = value
+	return nil
 }
 
 func (word *Container) GetKeys() []string {

@@ -6,11 +6,11 @@ import (
 	"lab.draklowell.net/routine-runtime/internal/context"
 )
 
-type CachedLoader struct {
-	Routines map[string]*CachedRoutine
+type StaticLoader struct {
+	Routines map[string]*StaticRoutine
 }
 
-func (loader *CachedLoader) GetRoutine(entry string) (binary.ByteOrder, []byte, []context.Constant, map[int]int, string, error) {
+func (loader *StaticLoader) GetRoutine(entry string) (binary.ByteOrder, []byte, []context.Constant, map[int]int, string, error) {
 	routine := loader.Routines[entry]
 	if routine == nil {
 		return nil, nil, nil, nil, "", nil
@@ -19,7 +19,7 @@ func (loader *CachedLoader) GetRoutine(entry string) (binary.ByteOrder, []byte, 
 	return routine.Order, routine.Bytecode, routine.Constants, routine.LineMap, routine.Entry, nil
 }
 
-type CachedRoutine struct {
+type StaticRoutine struct {
 	Bytecode  []byte
 	Constants []context.Constant
 	LineMap   map[int]int
