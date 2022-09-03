@@ -30,7 +30,7 @@ build:
 	go build $(GOFLAGS) -buildmode=c-shared -o build/$(NAME)-$(OS)-$(ARCH).$(EXTENSION) $(SOURCES)
 	$(PYTHON) make_header.py
 
-build-full:
+build-full: clean
 	OS=linux ARCH=amd64 make build
 
 clean:
