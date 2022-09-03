@@ -14,7 +14,11 @@ func rrtWordContainerNew(vmPtr Pointer) Pointer {
 		return NullPointer
 	}
 
-	container := word.NewContainer()
+	container, err := vm.machine.Heap().NewContainer()
+	if err != nil {
+		throw(err)
+		return NullPointer
+	}
 
 	containerPtr, err := vm.words.Add(container)
 	if err != nil {

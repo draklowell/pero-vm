@@ -21,6 +21,7 @@ type Machine struct {
 
 	Breaker BreakCallback
 	Stack   *Stack
+	Heap    *Heap
 }
 
 func NewMachine(finder ModuleFinder, stackSize uint, heapSize uint) *Machine {
@@ -29,6 +30,7 @@ func NewMachine(finder ModuleFinder, stackSize uint, heapSize uint) *Machine {
 
 		Breaker: EmptyBreaker,
 		Stack:   NewStack(stackSize),
+		Heap:    NewHeap(heapSize),
 	}
 }
 

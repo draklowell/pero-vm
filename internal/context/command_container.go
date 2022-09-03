@@ -3,7 +3,12 @@ package context
 import "lab.draklowell.net/routine-runtime/internal/word"
 
 func (ctx *Context) commandContainerNew() error {
-	return ctx.machine.Stack.Push(word.NewContainer())
+	container, err := ctx.machine.Heap.NewContainer()
+	if err != nil {
+		return err
+	}
+
+	return ctx.machine.Stack.Push(container)
 }
 
 func (ctx *Context) commandContainerPut() error {

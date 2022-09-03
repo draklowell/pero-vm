@@ -18,7 +18,7 @@ func rrtWordBytesNew(vmPtr Pointer, value *C.char, valueSize C.int) Pointer {
 		array[i] = byte(cByte)
 	}
 
-	bytes, err := word.NewBytes(array)
+	bytes, err := vm.machine.Heap().NewBytes(array)
 	if err != nil {
 		throw(err)
 		return NullPointer

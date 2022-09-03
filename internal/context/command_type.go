@@ -1,16 +1,17 @@
 package context
 
-import "lab.draklowell.net/routine-runtime/internal/word"
-
 func (ctx *Context) commandCheckTypeStatic(typ int) error {
 	value, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return err
 	}
 
-	ctx.machine.Stack.Push(word.NewBoolean(value.GetType() == typ))
+	boolean, err := ctx.machine.Heap.NewBoolean(value.GetType() == typ)
+	if err != nil {
+		return err
+	}
 
-	return nil
+	return ctx.machine.Stack.Push(boolean)
 }
 
 func (ctx *Context) commandFloatToInteger() error {
@@ -19,7 +20,12 @@ func (ctx *Context) commandFloatToInteger() error {
 		return err
 	}
 
-	return ctx.machine.Stack.Push(word.NewInteger(int64(value.GetValue())))
+	integer, err := ctx.machine.Heap.NewInteger(int64(value.GetValue()))
+	if err != nil {
+		return err
+	}
+
+	return ctx.machine.Stack.Push(integer)
 }
 
 func (ctx *Context) commandIntegerToFloat() error {
@@ -28,5 +34,10 @@ func (ctx *Context) commandIntegerToFloat() error {
 		return err
 	}
 
-	return ctx.machine.Stack.Push(word.NewFloat(float64(value.GetValue())))
+	float, err := ctx.machine.Heap.NewFloat(float64(value.GetValue()))
+	if err != nil {
+		return err
+	}
+
+	return ctx.machine.Stack.Push(float)
 }

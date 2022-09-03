@@ -12,7 +12,12 @@ func rrtWordArrayNew(vmPtr Pointer, size C.int) Pointer {
 		return NullPointer
 	}
 
-	array := word.NewArray(int(size))
+	array, err := vm.machine.Heap().NewArray(int(size))
+	if err != nil {
+		throw(err)
+		return NullPointer
+	}
+
 	arrayPtr, err := vm.words.Add(array)
 	if err != nil {
 		throw(err)

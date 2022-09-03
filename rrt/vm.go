@@ -65,3 +65,7 @@ func (vm *VirtualMachine) RemoveRoutine(entry string) {
 	vm.nativeFinder.SetRoutine(entry, nil)
 	vm.staticLoader.Routines[entry] = nil
 }
+
+func (vm *VirtualMachine) Heap() *internal.Heap {
+	return vm.machine.Heap
+}

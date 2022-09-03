@@ -32,7 +32,12 @@ func (word *Array) Get(index int) (Word, error) {
 		return nil, err
 	}
 
-	return word.value[index], nil
+	value := word.value[index]
+	if value == nil {
+		return None, nil
+	}
+
+	return value, nil
 }
 
 func (word *Array) Set(index int, value Word) error {

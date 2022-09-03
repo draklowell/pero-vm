@@ -12,7 +12,12 @@ func rrtWordIntegerNew(vmPtr Pointer, value C.long) Pointer {
 		return NullPointer
 	}
 
-	integer := word.NewInteger(int64(value))
+	integer, err := vm.machine.Heap().NewInteger(int64(value))
+	if err != nil {
+		throw(err)
+		return NullPointer
+	}
+
 	integerPtr, err := vm.words.Add(integer)
 	if err != nil {
 		throw(err)
@@ -53,7 +58,12 @@ func rrtWordFloatNew(vmPtr Pointer, value C.double) Pointer {
 		return NullPointer
 	}
 
-	float := word.NewFloat(float64(value))
+	float, err := vm.machine.Heap().NewFloat(float64(value))
+	if err != nil {
+		throw(err)
+		return NullPointer
+	}
+
 	floatPtr, err := vm.words.Add(float)
 	if err != nil {
 		throw(err)
@@ -99,7 +109,12 @@ func rrtWordBooleanNew(vmPtr Pointer, value C.char) Pointer {
 		valueBool = true
 	}
 
-	boolean := word.NewBoolean(valueBool)
+	boolean, err := vm.machine.Heap().NewBoolean(valueBool)
+	if err != nil {
+		throw(err)
+		return NullPointer
+	}
+
 	booleanPtr, err := vm.words.Add(boolean)
 	if err != nil {
 		throw(err)

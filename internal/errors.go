@@ -15,4 +15,5 @@ var (
 	ErrStackTooLarge = errors.New("stack too large")
 	ErrStackEmpty    = errors.New("stack empty")
 	ErrNilPointer    = errors.New("unexpected nil pointer")
+	ErrHeapTooLarge  = errors.New("heap too large")
 )

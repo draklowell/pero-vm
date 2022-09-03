@@ -1,16 +1,16 @@
 package context
 
-import (
-	"lab.draklowell.net/routine-runtime/internal/word"
-)
-
 func (ctx *Context) commandArrayNew() error {
 	size, err := ctx.popInteger()
 	if err != nil {
 		return err
 	}
 
-	return ctx.machine.Stack.Push(word.NewArray(int(size.GetValue())))
+	array, err := ctx.machine.Heap.NewArray(int(size.GetValue()))
+	if err != nil {
+		return err
+	}
+	return ctx.machine.Stack.Push(array)
 }
 
 func (ctx *Context) commandArrayLength() error {
@@ -19,7 +19,11 @@ func (ctx *Context) commandArrayLength() error {
 		return err
 	}
 
-	return ctx.machine.Stack.Push(word.NewInteger(int64(array.GetSize())))
+	integer, err := ctx.machine.Heap.NewInteger(int64(array.GetSize()))
+	if err != nil {
+		return err
+	}
+	return ctx.machine.Stack.Push(integer)
 }
 
 func (ctx *Context) commandArrayGetStatic(index int) error {
