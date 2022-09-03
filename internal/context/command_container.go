@@ -3,7 +3,7 @@ package context
 import "lab.draklowell.net/routine-runtime/internal/word"
 
 func (ctx *Context) commandContainerNew() error {
-	return ctx.stack.Push(word.NewContainer())
+	return ctx.machine.Stack.Push(word.NewContainer())
 }
 
 func (ctx *Context) commandContainerPut() error {
@@ -17,7 +17,7 @@ func (ctx *Context) commandContainerPut() error {
 		return err
 	}
 
-	value, err := ctx.stack.Pop()
+	value, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return err
 	}
@@ -31,7 +31,7 @@ func (ctx *Context) commandContainerPut() error {
 }
 
 func (ctx *Context) commandContainerPutDynamic() error {
-	value, err := ctx.stack.Pop()
+	value, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func (ctx *Context) commandContainerGet() error {
 		return err
 	}
 
-	ctx.stack.Push(value)
+	ctx.machine.Stack.Push(value)
 	return nil
 }
 
@@ -91,7 +91,7 @@ func (ctx *Context) commandContainerGetDynamic() error {
 		return err
 	}
 
-	ctx.stack.Push(value)
+	ctx.machine.Stack.Push(value)
 	return nil
 }
 
@@ -111,6 +111,6 @@ func (ctx *Context) commandContainerKeys() error {
 		result.Set(i, value)
 	}
 
-	ctx.stack.Push(result)
+	ctx.machine.Stack.Push(result)
 	return nil
 }

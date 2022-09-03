@@ -10,7 +10,7 @@ func (ctx *Context) commandArrayNew() error {
 		return err
 	}
 
-	return ctx.stack.Push(word.NewArray(int(size.GetValue())))
+	return ctx.machine.Stack.Push(word.NewArray(int(size.GetValue())))
 }
 
 func (ctx *Context) commandArrayLength() error {
@@ -19,7 +19,7 @@ func (ctx *Context) commandArrayLength() error {
 		return err
 	}
 
-	return ctx.stack.Push(word.NewInteger(int64(array.GetSize())))
+	return ctx.machine.Stack.Push(word.NewInteger(int64(array.GetSize())))
 }
 
 func (ctx *Context) commandArrayGetStatic(index int) error {
@@ -33,7 +33,7 @@ func (ctx *Context) commandArrayGetStatic(index int) error {
 		return err
 	}
 
-	return ctx.stack.Push(value)
+	return ctx.machine.Stack.Push(value)
 }
 
 func (ctx *Context) commandArrayGet() error {
@@ -46,7 +46,7 @@ func (ctx *Context) commandArrayGet() error {
 }
 
 func (ctx *Context) commandArraySetStatic(index int) error {
-	value, err := ctx.stack.Pop()
+	value, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return err
 	}
@@ -61,11 +61,11 @@ func (ctx *Context) commandArraySetStatic(index int) error {
 		return err
 	}
 
-	return ctx.stack.Push(value)
+	return ctx.machine.Stack.Push(value)
 }
 
 func (ctx *Context) commandArraySet() error {
-	value, err := ctx.stack.Pop()
+	value, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return err
 	}
@@ -85,5 +85,5 @@ func (ctx *Context) commandArraySet() error {
 		return err
 	}
 
-	return ctx.stack.Push(value)
+	return ctx.machine.Stack.Push(value)
 }

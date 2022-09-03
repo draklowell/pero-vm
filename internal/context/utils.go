@@ -5,7 +5,7 @@ import (
 )
 
 func (ctx *Context) popArray() (*word.Array, error) {
-	valueWord, err := ctx.stack.Pop()
+	valueWord, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return nil, err
 	}
@@ -19,7 +19,7 @@ func (ctx *Context) popArray() (*word.Array, error) {
 }
 
 func (ctx *Context) popContainer() (*word.Container, error) {
-	valueWord, err := ctx.stack.Pop()
+	valueWord, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (ctx *Context) popContainer() (*word.Container, error) {
 }
 
 func (ctx *Context) popInteger() (*word.Integer, error) {
-	valueWord, err := ctx.stack.Pop()
+	valueWord, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (ctx *Context) popInteger() (*word.Integer, error) {
 }
 
 func (ctx *Context) popFloat() (*word.Float, error) {
-	valueWord, err := ctx.stack.Pop()
+	valueWord, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (ctx *Context) popFloat() (*word.Float, error) {
 }
 
 func (ctx *Context) popString() (string, error) {
-	valueWord, err := ctx.stack.Pop()
+	valueWord, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return "", err
 	}
@@ -72,7 +72,7 @@ func (ctx *Context) popString() (string, error) {
 }
 
 func (ctx *Context) popBoolean() (bool, error) {
-	valueWord, err := ctx.stack.Pop()
+	valueWord, err := ctx.machine.Stack.Pop()
 	if err != nil {
 		return false, err
 	}

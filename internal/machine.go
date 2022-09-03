@@ -19,15 +19,16 @@ type ModuleFinder interface {
 type Machine struct {
 	finder ModuleFinder
 
-	StackSize uint16
-	Breaker   BreakCallback
+	Breaker BreakCallback
+	Stack   *Stack
 }
 
-func NewMachine(finder ModuleFinder, traceSize uint16, stackSize uint16) *Machine {
+func NewMachine(finder ModuleFinder, stackSize uint, heapSize uint) *Machine {
 	return &Machine{
-		StackSize: stackSize,
-		finder:    finder,
-		Breaker:   EmptyBreaker,
+		finder: finder,
+
+		Breaker: EmptyBreaker,
+		Stack:   NewStack(stackSize),
 	}
 }
 

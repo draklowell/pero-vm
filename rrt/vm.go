@@ -9,11 +9,6 @@ import (
 	"lab.draklowell.net/routine-runtime/internal/word"
 )
 
-const (
-	DefaultTraceSize = 16384
-	DefaultStackSize = 1024
-)
-
 type VirtualMachine struct {
 	name string
 
@@ -27,7 +22,7 @@ type VirtualMachine struct {
 	dynamicFinder *contrib.ContextFinder
 }
 
-func NewVirtualMachine(name string, traceSize uint16, stackSize uint16) *VirtualMachine {
+func NewVirtualMachine(name string, stackSize uint, heapSize uint) *VirtualMachine {
 	nativeFinder := contrib.NewNativeFinder(map[string]contrib.NativeRoutine{})
 
 	staticLoader := &contrib.StaticLoader{
@@ -46,7 +41,7 @@ func NewVirtualMachine(name string, traceSize uint16, stackSize uint16) *Virtual
 	return &VirtualMachine{
 		name:          name,
 		finder:        finder,
-		machine:       *internal.NewMachine(finder, traceSize, stackSize),
+		machine:       *internal.NewMachine(finder, stackSize, heapSize),
 		nativeFinder:  nativeFinder,
 		staticLoader:  staticLoader,
 		staticFinder:  staticFinder,

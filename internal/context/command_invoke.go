@@ -15,7 +15,7 @@ func (ctx *Context) commandInvokeCollectArguments() ([]word.Word, uint8, error) 
 
 	arguments := make([]word.Word, argumentsCount)
 	for i := uint8(0); i < argumentsCount; i++ {
-		arguments[i], err = ctx.stack.Pop()
+		arguments[i], err = ctx.machine.Stack.Pop()
 		if err != nil {
 			return nil, 0, err
 		}
@@ -33,7 +33,7 @@ func (ctx *Context) commandInvokeCollectReturn(ret []word.Word, retCount uint8) 
 		if value == nil {
 			value = word.None
 		}
-		err := ctx.stack.Push(value)
+		err := ctx.machine.Stack.Push(value)
 		if err != nil {
 			return err
 		}

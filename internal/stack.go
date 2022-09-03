@@ -1,44 +1,35 @@
-package context
+package internal
 
-import "lab.draklowell.net/routine-runtime/internal/word"
-
-const (
-	defaultStackSize = 1024
-	defaultBlockSize = 1024
+import (
+	"lab.draklowell.net/routine-runtime/internal/word"
 )
+
+const blockSize = 1024
 
 type Stack struct {
 	head      *block
-	size      uint16
-	maxSize   uint16
+	size      uint
+	sizeLimit uint
 	blockSize uint16
 }
 
-func NewStack(stackSize uint16) *Stack {
-	if stackSize == 0 {
-		stackSize = defaultStackSize
-	}
+type stackLock struct{}
 
+func (sl *stackLock) GetType() int {
+	return -1
+}
+
+func NewStack(sizeLimit uint) *Stack {
 	stack := &Stack{
-		maxSize:   stackSize,
-		blockSize: defaultBlockSize,
+		blockSize: blockSize,
+		sizeLimit: sizeLimit,
 	}
 	stack.pushBlock()
 	return stack
 }
 
-func (stack *Stack) Clear() error {
-	for stack.size > 1 {
-		err := stack.popBlock()
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 func (stack *Stack) Dump() []word.Word {
-	result := make([]word.Word, 0, stack.size*stack.blockSize)
+	result := make([]word.Word, 0, stack.size*uint(stack.blockSize))
 	b := stack.head
 	for b.next != nil {
 		result = append(result, b.Dump()...)
@@ -47,8 +38,57 @@ func (stack *Stack) Dump() []word.Word {
 	return result
 }
 
+func (stack *Stack) PushLock() error {
+	return stack.push(&stackLock{})
+}
+
+func (stack *Stack) PopLock() error {
+	for {
+		element, err := stack.pop()
+		if err != nil {
+			return err
+		}
+
+		if element == nil {
+			return nil
+		}
+
+		if element.GetType() == -1 {
+			return nil
+		}
+	}
+}
+
+func (stack *Stack) Push(value word.Word) error {
+	return stack.push(value)
+}
+
 func (stack *Stack) Pop() (word.Word, error) {
-	value, err := stack.Fetch()
+	_, err := stack.Fetch()
+	if err != nil {
+		return nil, err
+	}
+	return stack.pop()
+}
+
+func (stack *Stack) Fetch() (word.Word, error) {
+	value, err := stack.fetch()
+	if err != nil {
+		return nil, err
+	}
+
+	if value == nil {
+		return nil, ErrStackEmpty
+	}
+
+	if value.GetType() == -1 {
+		return nil, ErrStackEmpty
+	}
+	return value, nil
+}
+
+func (stack *Stack) pop() (word.Word, error) {
+	value, err := stack.fetch()
 	if err != nil {
 		return value, err
 	}
@@ -57,7 +97,7 @@ func (stack *Stack) Pop() (word.Word, error) {
 	return value, nil
 }
 
-func (stack *Stack) Fetch() (word.Word, error) {
+func (stack *Stack) fetch() (word.Word, error) {
 	if err := stack.normalize(); err != nil {
 		var result word.Word
 		return result, err
@@ -67,7 +107,11 @@ func (stack *Stack) Fetch() (word.Word, error) {
 	return value, nil
 }
 
-func (stack *Stack) Push(element word.Word) error {
+func (stack *Stack) push(element word.Word) error {
+	if element == nil {
+		return ErrNilPointer
+	}
+
 	if stack.head.index+1 >= len(stack.head.data) {
 		if err := stack.pushBlock(); err != nil {
 			return err
@@ -100,7 +144,8 @@ func (stack *Stack) popBlock() error {
 }
 
 func (stack *Stack) pushBlock() error {
-	if stack.size+1 > stack.maxSize {
+	value := stack.getSize() + uint(stack.blockSize)
+	if value > stack.sizeLimit {
 		return ErrStackTooLarge
 	}
 
@@ -111,6 +156,10 @@ func (stack *Stack) pushBlock() error {
 	}
 	stack.size++
 	return nil
+}
+
+func (stack *Stack) getSize() uint {
+	return uint(stack.size) * uint(stack.blockSize)
 }
 
 type block struct {

@@ -10,8 +10,6 @@ import (
 type Constant interface{}
 
 type Context struct {
-	stack *Stack
-
 	bytecode  []byte
 	offset    int
 	variables []word.Word
@@ -31,7 +29,6 @@ type Context struct {
 func NewContext(machine *internal.Machine, order binary.ByteOrder, bytecode []byte, constants []Constant, lineMap map[int]int, entry string) *Context {
 	return &Context{
 		machine:   machine,
-		stack:     NewStack(machine.StackSize),
 		bytecode:  bytecode,
 		constants: constants,
 		variables: make([]word.Word, 256),
@@ -74,6 +71,12 @@ func (ctx *Context) ExecuteCommand() error {
 }
 
 func (ctx *Context) Execute(breaker internal.BreakCallback) error {
+	err := ctx.machine.Stack.PushLock()
+	if err != nil {
+		return err
+	}
+	defer ctx.machine.Stack.PopLock()
+
 	for !ctx.IsFinished() && !breaker() {
 		err := ctx.ExecuteCommand()
 		if err != nil {
@@ -105,7 +108,12 @@ func (ctx *Context) SetVariable(index uint8, value word.Word) {
 }
 
 func (ctx *Context) GetVariable(index uint8) word.Word {
-	return ctx.variables[index]
+	value := ctx.variables[index]
+	if value == nil {
+		return word.None
+	}
+
+	return value
 }
 
 func (ctx *Context) IsFinished() bool {

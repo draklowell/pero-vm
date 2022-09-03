@@ -5,7 +5,7 @@ import "lab.draklowell.net/routine-runtime/internal/word"
 func (ctx *Context) commandReturnStatic(retCount int) error {
 	result := make([]word.Word, retCount)
 	for i := 0; i < retCount; i++ {
-		word, err := ctx.stack.Pop()
+		word, err := ctx.machine.Stack.Pop()
 		if err != nil {
 			return err
 		}
