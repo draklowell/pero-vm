@@ -89,10 +89,10 @@ const (
 	CommandCheckTypeArray = 41
 	// element -> bool
 	CommandCheckTypeContainer = 42
-	// float -> integer
-	CommandFloatToInteger = 43
-	// integer -> float
-	CommandIntegerToFloat = 44
+	// value -> integer
+	CommandToInteger = 43
+	// value -> float
+	CommandToFloat = 44
 	// ->
 	CommandGoto = 45
 	// bool ->
@@ -111,6 +111,72 @@ const (
 	CommandContainerKeys = 52
 	// element -> bool
 	CommandCheckTypeBoolean = 53
+	// value1, value2 -> integer
+	CommandIAdd = 54
+	// value1, value2 -> integer
+	CommandISub = 55
+	// value1, value2 -> integer
+	CommandIMul = 56
+	// value1, value2 -> integer
+	CommandIDiv = 57
+	// value1, value2 -> integer
+	CommandIRem = 58
+	// value1, value2 -> integer
+	CommandFAdd = 59
+	// value1, value2 -> integer
+	CommandFSub = 60
+	// value1, value2 -> integer
+	CommandFMul = 61
+	// value1, value2 -> integer
+	CommandFDiv = 62
+	// value1, value2 -> integer
+	CommandFRem = 63
+	// value -> newValue
+	CommandNeg = 64
+	// value1, value2 -> boolean
+	CommandAnd = 65
+	// value1, value2 -> boolean
+	CommandOr = 66
+	// value -> boolean
+	CommandNot = 67
+	// value1, value2 -> integer
+	CommandBAnd = 68
+	// value1, value2 -> integer
+	CommandBOr = 69
+	// value1, value2 -> integer
+	CommandBXor = 70
+	// value -> integer
+	CommandBNot = 71
+	// value1, value2 -> integer
+	CommandShiftLeft = 72
+	// value1, value2 -> integer
+	CommandShiftRight = 73
+	// value1, value2 -> boolean
+	CommandIGT = 74
+	// value1, value2 -> boolean
+	CommandIGE = 75
+	// value1, value2 -> boolean
+	CommandILT = 76
+	// value1, value2 -> boolean
+	CommandILE = 77
+	// value1, value2 -> boolean
+	CommandIEQ = 78
+	// value1, value2 -> boolean
+	CommandINE = 79
+	// value1, value2 -> boolean
+	CommandFGT = 80
+	// value1, value2 -> boolean
+	CommandFGE = 81
+	// value1, value2 -> boolean
+	CommandFLT = 82
+	// value1, value2 -> boolean
+	CommandFLE = 83
+	// value1, value2 -> boolean
+	CommandFEQ = 84
+	// value1, value2 -> boolean
+	CommandFNE = 85
+	// element -> bool
+	CommandCheckTypeNotNone = 86
 )
 
 func (ctx *Context) executeCommand(command uint8) error {
@@ -203,10 +269,10 @@ func (ctx *Context) executeCommand(command uint8) error {
 		return ctx.commandCheckTypeStatic(word.TypeContainer)
 	case CommandCheckTypeBoolean:
 		return ctx.commandCheckTypeStatic(word.TypeBoolean)
-	case CommandFloatToInteger:
-		return ctx.commandFloatToInteger()
-	case CommandIntegerToFloat:
-		return ctx.commandIntegerToFloat()
+	case CommandToInteger:
+		return ctx.commandToInteger()
+	case CommandToFloat:
+		return ctx.commandToFloat()
 	case CommandGoto:
 		return ctx.commandGoto()
 	case CommandGotoIf:
@@ -223,6 +289,72 @@ func (ctx *Context) executeCommand(command uint8) error {
 		return ctx.commandContainerGet()
 	case CommandContainerKeys:
 		return ctx.commandContainerKeys()
+	case CommandIAdd:
+		return ctx.commandMathIAdd()
+	case CommandISub:
+		return ctx.commandMathISub()
+	case CommandIMul:
+		return ctx.commandMathIMul()
+	case CommandIDiv:
+		return ctx.commandMathIDiv()
+	case CommandIRem:
+		return ctx.commandMathIRem()
+	case CommandFAdd:
+		return ctx.commandMathFAdd()
+	case CommandFSub:
+		return ctx.commandMathFSub()
+	case CommandFMul:
+		return ctx.commandMathFMul()
+	case CommandFDiv:
+		return ctx.commandMathFDiv()
+	case CommandFRem:
+		return ctx.commandMathFRem()
+	case CommandNeg:
+		return ctx.commandMathNeg()
+	case CommandAnd:
+		return ctx.commandLogicalAnd()
+	case CommandOr:
+		return ctx.commandLogicalOr()
+	case CommandNot:
+		return ctx.commandLogicalNot()
+	case CommandBAnd:
+		return ctx.commandBitwiseAnd()
+	case CommandBOr:
+		return ctx.commandBitwiseOr()
+	case CommandBXor:
+		return ctx.commandBitwiseXor()
+	case CommandBNot:
+		return ctx.commandBitwiseNot()
+	case CommandShiftLeft:
+		return ctx.commandBitwiseShiftLeft()
+	case CommandShiftRight:
+		return ctx.commandBitwiseShiftRight()
+	case CommandIGT:
+		return ctx.commandCompareIGreater()
+	case CommandIGE:
+		return ctx.commandCompareIGreaterEquals()
+	case CommandILT:
+		return ctx.commandCompareILower()
+	case CommandILE:
+		return ctx.commandCompareILowerEquals()
+	case CommandIEQ:
+		return ctx.commandCompareIEquals()
+	case CommandINE:
+		return ctx.commandCompareINotEquals()
+	case CommandFGT:
+		return ctx.commandCompareFGreater()
+	case CommandFGE:
+		return ctx.commandCompareFGreaterEquals()
+	case CommandFLT:
+		return ctx.commandCompareFLower()
+	case CommandFLE:
+		return ctx.commandCompareFLowerEquals()
+	case CommandFEQ:
+		return ctx.commandCompareFEquals()
+	case CommandFNE:
+		return ctx.commandCompareFNotEquals()
+	case CommandCheckTypeNotNone:
+		return ctx.commandCheckNotTypeStatic(word.TypeNone)
 	}
 
 	return nil

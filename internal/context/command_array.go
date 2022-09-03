@@ -6,7 +6,7 @@ func (ctx *Context) commandArrayNew() error {
 		return err
 	}
 
-	array, err := ctx.machine.Heap.NewArray(int(size.GetValue()))
+	array, err := ctx.machine.Heap.NewArray(int(size))
 	if err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func (ctx *Context) commandArrayGet() error {
 		return err
 	}
 
-	return ctx.commandArrayGetStatic(int(index.GetValue()))
+	return ctx.commandArrayGetStatic(int(index))
 }
 
 func (ctx *Context) commandArraySetStatic(index int) error {
@@ -84,7 +84,7 @@ func (ctx *Context) commandArraySet() error {
 		return err
 	}
 
-	err = array.Set(int(index.GetValue()), value)
+	err = array.Set(int(index), value)
 	if err != nil {
 		return err
 	}

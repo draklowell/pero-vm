@@ -32,30 +32,17 @@ func (ctx *Context) popContainer() (*word.Container, error) {
 	return value, nil
 }
 
-func (ctx *Context) popInteger() (*word.Integer, error) {
+func (ctx *Context) popInteger() (int64, error) {
 	valueWord, err := ctx.machine.Stack.Pop()
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	value, ok := valueWord.(*word.Integer)
 	if !ok {
-		return nil, ErrInvalidWordType
+		return 0, ErrInvalidWordType
 	}
 
-	return value, nil
-}
-
-func (ctx *Context) popFloat() (*word.Float, error) {
-	valueWord, err := ctx.machine.Stack.Pop()
-	if err != nil {
-		return nil, err
-	}
-	value, ok := valueWord.(*word.Float)
-	if !ok {
-		return nil, ErrInvalidWordType
-	}
-
-	return value, nil
+	return value.GetValue(), nil
 }
 
 func (ctx *Context) popString() (string, error) {
@@ -82,6 +69,38 @@ func (ctx *Context) popBoolean() (bool, error) {
 	}
 
 	return value.GetValue(), nil
+}
+
+func (ctx *Context) popIntegerSoft() (int64, error) {
+	valueWord, err := ctx.machine.Stack.Pop()
+	if err != nil {
+		return 0, err
+	}
+
+	switch value := valueWord.(type) {
+	case *word.Integer:
+		return value.GetValue(), nil
+	case *word.Float:
+		return int64(value.GetValue()), nil
+	}
+
+	return 0, ErrInvalidWordType
+}
+
+func (ctx *Context) popFloatSoft() (float64, error) {
+	valueWord, err := ctx.machine.Stack.Pop()
+	if err != nil {
+		return 0, err
+	}
+
+	switch value := valueWord.(type) {
+	case *word.Integer:
+		return float64(value.GetValue()), nil
+	case *word.Float:
+		return value.GetValue(), nil
+	}
+
+	return 0, ErrInvalidWordType
 }
 
 var (
