@@ -2,6 +2,8 @@
 #define __rrt_types
 
 #define rrtNullPointer -1
+#define rrtGCFrequent 0
+#define rrtGCRare 1
 
 typedef unsigned char (*rrtBreaker) ();
 

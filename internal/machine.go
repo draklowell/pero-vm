@@ -1,9 +1,15 @@
 package internal
 
 import (
+	"runtime"
 	"strings"
 
 	"lab.draklowell.net/routine-runtime/common/word"
+)
+
+const (
+	GCFrequent = 0
+	GCRare     = 1
 )
 
 type BreakCallback func() bool
@@ -22,19 +28,27 @@ type Machine struct {
 	Breaker BreakCallback
 	Stack   *Stack
 	Heap    *Heap
+
+	gcMode int
 }
 
-func NewMachine(finder ModuleFinder, stackSize uint, heapSize uint) *Machine {
+func NewMachine(finder ModuleFinder, stackSize uint, heapSize uint, gcMode int) *Machine {
 	return &Machine{
 		finder: finder,
 
 		Breaker: EmptyBreaker,
 		Stack:   NewStack(stackSize),
-		Heap:    NewHeap(heapSize),
+		Heap:    NewHeap(heapSize, gcMode),
+
+		gcMode: gcMode,
 	}
 }
 
 func (machine *Machine) Execute(caller string, entry string, arguments []word.Word) ([]word.Word, error) {
+	if machine.gcMode == GCFrequent {
+		runtime.GC()
+	}
+
 	if strings.ContainsRune(entry, 0) {
 		return nil, &ErrEntryNotFound{Entry: entry}
 	}

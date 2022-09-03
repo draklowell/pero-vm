@@ -16,7 +16,7 @@ type VM struct {
 var vms, _ = NewPointerSet[*VM](128)
 
 //export rrtVMNew
-func rrtVMNew(name *C.char, wordPointerSetSize C.int, stackSize C.int, heapSize C.int) Pointer {
+func rrtVMNew(name *C.char, wordPointerSetSize C.int, stackSize C.int, heapSize C.int, gcMode C.int) Pointer {
 	wordsCache, err := NewPointerSet[word.Word](int(wordPointerSetSize))
 	if err != nil {
 		throw(err)
@@ -28,6 +28,7 @@ func rrtVMNew(name *C.char, wordPointerSetSize C.int, stackSize C.int, heapSize 
 			C.GoString(name),
 			uint(stackSize),
 			uint(heapSize),
+			int(gcMode),
 		),
 		words: wordsCache,
 	})

@@ -22,7 +22,12 @@ type VirtualMachine struct {
 	dynamicFinder *contrib.ContextFinder
 }
 
-func NewVirtualMachine(name string, stackSize uint, heapSize uint) *VirtualMachine {
+const (
+	GCFrequent = internal.GCFrequent
+	GCRare     = internal.GCRare
+)
+
+func NewVirtualMachine(name string, stackSize uint, heapSize uint, gcMode int) *VirtualMachine {
 	nativeFinder := contrib.NewNativeFinder(map[string]contrib.NativeRoutine{})
 
 	staticLoader := &contrib.StaticLoader{
@@ -41,7 +46,7 @@ func NewVirtualMachine(name string, stackSize uint, heapSize uint) *VirtualMachi
 	return &VirtualMachine{
 		name:          name,
 		finder:        finder,
-		machine:       *internal.NewMachine(finder, stackSize, heapSize),
+		machine:       *internal.NewMachine(finder, stackSize, heapSize, gcMode),
 		nativeFinder:  nativeFinder,
 		staticLoader:  staticLoader,
 		staticFinder:  staticFinder,

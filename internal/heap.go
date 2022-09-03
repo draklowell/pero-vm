@@ -9,28 +9,44 @@ import (
 type Heap struct {
 	sizeLimit uint
 	size      uint
+	gcMode    int
 }
 
-func NewHeap(sizeLimit uint) *Heap {
+func NewHeap(sizeLimit uint, gcMode int) *Heap {
 	return &Heap{
 		sizeLimit: sizeLimit,
+		gcMode:    gcMode,
 	}
 }
 
-func (heap *Heap) register(value word.Word) error {
+func calculateSize(value word.Word) uint {
 	var size uint = 1
 	if bytes, ok := value.(*word.Bytes); ok {
 		size = uint(len(bytes.GetValue()))
 	}
+	return size
+}
+
+func (heap *Heap) unregister(value *word.Word) {
+	heap.size -= calculateSize(*value)
+}
+
+func (heap *Heap) register(value word.Word) error {
+	size := calculateSize(value)
 
 	if heap.size+size > heap.sizeLimit {
-		return ErrHeapTooLarge
+		if heap.gcMode == GCFrequent || heap.gcMode == GCRare {
+			runtime.GC()
+			if heap.size+size > heap.sizeLimit {
+				return ErrHeapTooLarge
+			}
+		} else {
+			return ErrHeapTooLarge
+		}
 	}
 
 	heap.size += size
-	runtime.SetFinalizer(value, func(pointer word.Word) {
-		heap.size -= size
-	})
+	runtime.SetFinalizer(&value, heap.unregister)
 
 	return nil
 }
