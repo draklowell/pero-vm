@@ -1,3 +1,7 @@
+# Unused files
+/Makefile
+/README.md
+
 # Tests
 /test*
 

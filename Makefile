@@ -1,48 +1,33 @@
-SOURCES := lab.draklowell.net/routine-runtime/wrapper/
-PYTHON := python3
-VERSION := $(shell cat VERSION)
+CURRENT_DIR := $(abspath .)
 
-export NAME := routine-runtime-$(VERSION)
-export CGO_ENABLED := 1
+ifdef DEBUG
+  DEBUG_FLAG := -e DEBUG
+endif
 
 ifndef OS
-  export OS := linux
+  OS := all
 endif
-
 ifndef ARCH
-  export ARCH := amd64
+  ARCH := all
 endif
 
-export GOOS := $(OS)
-export GOARCH := $(ARCH)
-
-ifeq ($(OS),windows)
-  export CC := x86_64-w64-mingw32-gcc
-  EXTENSION := dll
-else ifeq ($(OS),linux)
-  export CC=gcc
-  EXTENSION := so
-else ifeq ($(OS),darwin)
-  EXTENSION := so
-endif
-
-ifneq ($(DEBUG),true)
-  GOFLAGS := $(GOFLAGS) -ldflags="-s -w"
-endif
-
-.PHONY: build
+all: clean build
 
 build:
-	go build $(GOFLAGS) -buildmode=c-shared -o build/$(NAME)-$(OS)-$(ARCH).$(EXTENSION) $(SOURCES)
-	$(PYTHON) tools/make_header.py
+	mkdir build
 
-build-full: clean
-	OS=linux ARCH=amd64 make build
+	docker build .
+	sleep 3
+	$(eval CONTAINER := $(shell docker images -q | head -1))
+
+	docker run \
+		--mount type=bind,source=$(CURRENT_DIR)/build,target=/build \
+		-e OS=$(OS) -e ARCH=$(ARCH) $(DEBUG_FLAG) \
+		$(CONTAINER)
+	docker image rm -f $(CONTAINER)
 
 clean:
-	go clean
-	rm -rf __pycache__
-	rm -rf build/
+	rm -rf build
 
 summary:
 	cloc common/ internal/ loader/ rrt/ wrapper/ tools/
