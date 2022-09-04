@@ -18,6 +18,7 @@ build:
 
 	docker build .
 	sleep 3
+# TODO: Fix receiving docker image
 	$(eval CONTAINER := $(shell docker images -q | head -1))
 
 	docker run \
