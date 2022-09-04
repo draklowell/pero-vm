@@ -1,28 +1,34 @@
-SOURCES=lab.draklowell.net/routine-runtime/wrapper/
-PYTHON=python3
-VERSION=$(shell cat VERSION)
+SOURCES := lab.draklowell.net/routine-runtime/wrapper/
+PYTHON := python3
+VERSION := $(shell cat VERSION)
 
-export NAME=routine-runtime-$(VERSION)
-export CGO_ENABLED=1
+export NAME := routine-runtime-$(VERSION)
+export CGO_ENABLED := 1
 
 ifndef OS
-export OS=linux
-endif
-ifndef ARCH
-export ARCH=amd64
+  export OS := linux
 endif
 
-export GOOS=$(OS)
-ifeq ($(OS),windows)
-export CC=x86_64-w64-mingw32-gcc
-EXTENSION=dll
-else ifeq ($(OS),linux)
-export CC=gcc
-EXTENSION=so
-else ifeq ($(OS),darwin)
-EXTENSION=so
+ifndef ARCH
+  export ARCH := amd64
 endif
-export GOARCH=$(ARCH)
+
+export GOOS := $(OS)
+export GOARCH := $(ARCH)
+
+ifeq ($(OS),windows)
+  export CC := x86_64-w64-mingw32-gcc
+  EXTENSION := dll
+else ifeq ($(OS),linux)
+  export CC=gcc
+  EXTENSION := so
+else ifeq ($(OS),darwin)
+  EXTENSION := so
+endif
+
+ifneq ($(DEBUG),true)
+  GOFLAGS := $(GOFLAGS) -ldflags="-s -w"
+endif
 
 .PHONY: build
 
