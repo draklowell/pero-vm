@@ -6,7 +6,11 @@ with open(f"build/{os.environ['NAME']}-{os.environ['OS']}-{os.environ['ARCH']}.h
 with open(f"wrapper/types.h") as f:
     types_lines = f.readlines()
 
-result = '#ifdef __cplusplus\nextern "C" {\n#endif\n'
+result = ""
+if os.environ["OS"] == "windows":
+    result += "#define DllExport __declspec(dllexport)\n"
+
+result += '#ifdef __cplusplus\nextern "C" {\n#endif\n'
 
 if_stack = 0
 for line in types_lines:
@@ -16,6 +20,9 @@ for line in types_lines:
 
     if line.startswith("static"):
         continue
+
+    if os.environ["OS"] == "windows":
+        line = line.replace("__declspec(dllexport)", "DllExport")
 
     result += line + "\n"
 
@@ -47,6 +54,9 @@ for line in generated_lines:
         skip_cplusplus = True
         continue
 
+    if os.environ["OS"] == "windows":
+        line = line.replace("__declspec(dllexport)", "DllExport")
+    
     result += line + "\n"
 
 result += "#define __rrt_methods\n#endif\n#ifdef __cplusplus\n}\n#endif\n"

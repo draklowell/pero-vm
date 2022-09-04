@@ -12,14 +12,14 @@ ifndef ARCH
 export ARCH=amd64
 endif
 
+export GOOS=$(OS)
 ifeq ($(OS),windows)
-export GOOS=windows
+export CC=x86_64-w64-mingw32-gcc
 EXTENSION=dll
 else ifeq ($(OS),linux)
-export GOOS=linux
+export CC=gcc
 EXTENSION=so
 else ifeq ($(OS),darwin)
-export GOOS=darwin
 EXTENSION=so
 endif
 export GOARCH=$(ARCH)
@@ -28,7 +28,7 @@ export GOARCH=$(ARCH)
 
 build:
 	go build $(GOFLAGS) -buildmode=c-shared -o build/$(NAME)-$(OS)-$(ARCH).$(EXTENSION) $(SOURCES)
-	$(PYTHON) make_header.py
+	$(PYTHON) tools/make_header.py
 
 build-full: clean
 	OS=linux ARCH=amd64 make build
@@ -39,7 +39,7 @@ clean:
 	rm -rf build/
 
 summary:
-	cloc common/ internal/ loader/ rrt/ wrapper/
+	cloc common/ internal/ loader/ rrt/ wrapper/ tools/
 
 tag:
 	@echo "Add tag: '$(VERSION)'"
