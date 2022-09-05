@@ -40,11 +40,14 @@ def make(system: System, architecture: Architecture, debug: bool = False):
     goos = system.value
     goarch = architecture.value
 
-    flags = ""
+    flags = []
     if not debug:
-        flags += '-ldflags="-s -w"'
+        flags.append('-ldflags=-s -w')
 
-    execute(f"CC={compiler} GOOS={goos} GOARCH={goarch} go build {flags} -buildmode=c-shared -o /build/{target_name}.{extension} {sources}")
+    execute(
+        ["go", "build", *flags, "-buildmode=c-shared", "-o", f"/build/{target_name}.{extension}", sources],
+        {"CC": compiler, "GOOS": goos, "GOARCH": goarch}
+    )
 
     with open(f"/build/{target_name}.h", "r") as f:
         header = f.read()
