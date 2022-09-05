@@ -32,3 +32,6 @@ dist/
 # Python cache
 __pycache__
 *.py[cod]
+
+# Temporary files
+*.tmp
