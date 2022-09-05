@@ -1,7 +1,10 @@
-image: docker:latest
+image: docker:20.10.16
+
+services:
+  - docker:20.10.16-dind
 
 before_script:
-    - apt update && apt -y install make
+  - apk update && apk add make
 
 after_script:
   - make clean
