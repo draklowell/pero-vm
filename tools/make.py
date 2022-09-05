@@ -38,7 +38,10 @@ def make(system: System, architecture: Architecture, debug: bool = False):
     target_name = f"{name}-{system.value}-{architecture.value}"
 
     goos = system.value
-    goarch = architecture.value
+    if architecture == Architecture.I386:
+        goarch = "386"
+    else:
+        goarch = architecture.value
 
     flags = []
     if not debug:

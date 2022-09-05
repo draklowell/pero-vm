@@ -10,7 +10,7 @@ class System(Enum):
 
 class Architecture(Enum):
     AMD64 = "amd64"
-    I386 = "386"
+    I386 = "i386"
     ARM64 = "arm64"
     ARM = "arm"
 
