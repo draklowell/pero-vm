@@ -1,7 +1,9 @@
-# Unused files
+# Git files
 /Makefile
 /README.md
 /.gitignore
+/.gitlab-ci.yml
+/.git
 
 # Tests
 /test*
