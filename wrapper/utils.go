@@ -14,7 +14,7 @@ func GoArray[T any](cArray *T, size C.int) []T {
 	if cArray == nil {
 		return make([]T, 0)
 	}
-	return (*[1 << 30]T)(unsafe.Pointer(cArray))[:size:size]
+	return (*[1 << 24]T)(unsafe.Pointer(cArray))[:size:size]
 }
 
 func CArray[T any](goArray []T, size *C.int) *T {

@@ -15,7 +15,10 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
-RUN apt-get install -y python3 gcc gcc-mingw-w64
+RUN apt-get install -y python3
+RUN apt-get install -y gcc
+RUN apt-get install -y gcc-multilib
+RUN apt-get install -y gcc-mingw-w64
 
 FROM builder
 

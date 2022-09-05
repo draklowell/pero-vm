@@ -14,8 +14,8 @@ def make(system: System, architecture: Architecture, debug: bool = False):
     
     if architecture == Architecture.ALL:
         make(system, Architecture.AMD64, debug)
-        make(system, Architecture.ARM64, debug)
-        make(system, Architecture.ARM, debug)
+        #make(system, Architecture.ARM64, debug)
+        #make(system, Architecture.ARM, debug)
         if system != System.DARWIN:
             make(system, Architecture.I386, debug)
         return
@@ -46,7 +46,7 @@ def make(system: System, architecture: Architecture, debug: bool = False):
 
     execute(
         ["go", "build", *flags, "-buildmode=c-shared", "-o", f"/build/{target_name}.{extension}", sources],
-        {"CC": compiler, "GOOS": goos, "GOARCH": goarch}
+        {"CC": compiler, "GOOS": goos, "GOARCH": goarch, "CGO_ENABLED": "1"}
     )
 
     with open(f"/build/{target_name}.h", "r") as f:
