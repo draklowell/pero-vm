@@ -1,0 +1,16 @@
+image: docker:latest
+
+before_script:
+    - apt update && apt -y install make
+
+after_script:
+  - make clean
+
+build:
+  stage: build
+  script:
+    - make
+  artifacts:
+    paths:
+      - build
+    expire_in: 1 week
