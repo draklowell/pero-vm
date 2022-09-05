@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:22.04 as builder
 
 RUN apt-get update
 RUN apt-get install -y wget
@@ -16,6 +16,8 @@ ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
 RUN apt-get install -y python3 gcc gcc-mingw-w64
+
+FROM builder
 
 RUN mkdir /build
 

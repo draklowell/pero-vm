@@ -11,28 +11,24 @@ ifndef ARCH
   ARCH := all
 endif
 
-CONTAINER := `awk 'END {print $$NF}' build.docker.tmp`
+CONTAINER_TAG := rrt-builder
 
 all: clean build
 
 build:
 	mkdir build
 
-	docker build . 2>&1 | tee build.docker.tmp
+	docker build --tag $(CONTAINER_TAG) .
 
-	@echo Using container $(CONTAINER)
+	@echo Using container $(CONTAINER_TAG)
 
-	docker run \
+	docker run --rm \
 		--mount type=bind,source=$(CURRENT_DIR)/build,target=/build \
 		-e OS=$(OS) -e ARCH=$(ARCH) $(DEBUG_FLAG) \
-		$(CONTAINER)
-
-	docker image rm -f $(CONTAINER)
-	rm -f build.docker.tmp
+		$(CONTAINER_TAG)
 
 clean:
 	rm -rf build
-	rm -f build.docker.tmp
 
 summary:
 	cloc common/ internal/ loader/ rrt/ wrapper/ tools/

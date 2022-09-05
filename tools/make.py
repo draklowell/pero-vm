@@ -1,3 +1,4 @@
+import sys
 from tools_header import make_header
 from tools_types import Architecture, System
 from tools_os import execute
@@ -68,4 +69,8 @@ def main():
     make(System(system), Architecture(architecture), debug)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit as e:
+        print("Exit with code:", e.code)
+        sys.exit(min(e.code, 127))
