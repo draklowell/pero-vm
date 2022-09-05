@@ -4,6 +4,13 @@
 #define rrtNullPointer -1
 #define rrtGCFrequent 0
 #define rrtGCRare 1
+#define rrtTypeNone 0
+#define rrtTypeInteger 1
+#define rrtTypeFloat 2
+#define rrtTypeArray 3
+#define rrtTypeContainer 4
+#define rrtTypeBytes 5
+#define rrtTypeBoolean 6
 
 typedef unsigned char (*rrtBreaker) ();
 
