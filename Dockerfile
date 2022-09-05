@@ -7,7 +7,7 @@ RUN wget \
   -P /tmp \
   --no-verbose --show-progress \
   --progress=bar:force:noscroll \
-  https://go.dev/dl/go1.19.linux-amd64.tar.gz
+  https://go.dev/dl/go1.19.linux-amd64.tar.gz 2>&1
 RUN tar -C /usr/local -xzf /tmp/go1.19.linux-amd64.tar.gz
 RUN rm /tmp/go1.19.linux-amd64.tar.gz
 
