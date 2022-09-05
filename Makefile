@@ -16,10 +16,8 @@ all: clean build
 build:
 	mkdir build
 
-	docker build .
-	sleep 3
-# TODO: Fix receiving docker image
-	$(eval CONTAINER := $(shell docker images -q | head -1))
+	docker build . 2>&1 | tee /tmp/rrt.build.dockeroutput
+	$(eval CONTAINER := $(shell awk 'END {print $$NF}' /tmp/rrt.build.dockeroutput))
 
 	docker run \
 		--mount type=bind,source=$(CURRENT_DIR)/build,target=/build \
