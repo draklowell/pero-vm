@@ -11,7 +11,7 @@ ifndef ARCH
   ARCH := all
 endif
 
-CONTAINER := $(shell awk 'END {print $$NF}' build.docker.tmp)
+CONTAINER := `awk 'END {print $$NF}' build.docker.tmp`
 
 all: clean build
 
