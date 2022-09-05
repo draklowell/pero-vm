@@ -14,8 +14,8 @@ def make(system: System, architecture: Architecture, debug: bool = False):
     
     if architecture == Architecture.ALL:
         make(system, Architecture.AMD64, debug)
-        #make(system, Architecture.ARM64, debug)
-        #make(system, Architecture.ARM, debug)
+        make(system, Architecture.ARM64, debug)
+        make(system, Architecture.ARM, debug)
         if system != System.DARWIN:
             make(system, Architecture.I386, debug)
         return
@@ -25,17 +25,32 @@ def make(system: System, architecture: Architecture, debug: bool = False):
     sources = "lab.draklowell.net/routine-runtime/wrapper/"
     name = f"routine-runtime-{version}"
 
+    platform = f"{system.value}-{architecture.value}"
+    environ = {}
     if system == System.WINDOWS:
-        compiler = "x86_64-w64-mingw32-gcc"
+        if architecture == Architecture.AMD64:
+            platform = "win64"
+            compiler = "x86_64-w64-mingw32-gcc"
+        else:
+            print(f"Unsupported platform: {system.value}, {architecture.value}")
+            return
         extension = "dll"
     elif system == System.LINUX:
-        compiler = "gcc"
+        if architecture == Architecture.AMD64:
+            compiler = "gcc"
+        elif architecture == Architecture.ARM64:
+            compiler = "aarch64-linux-gnu-gcc"
+        elif architecture == Architecture.ARM:
+            compiler = "arm-linux-gnueabi-gcc"
+        else:
+            print(f"Unsupported platform: {system.value}, {architecture.value}")
+            return
         extension = "so"
-    elif system == System.DARWIN:
-        compiler = "gcc"
-        extension = "so"
+    else:
+        print(f"Unsupported platform: {system.value}, {architecture.value}")
+        return
 
-    target_name = f"{name}-{system.value}-{architecture.value}"
+    target_name = f"{name}-{platform}"
 
     goos = system.value
     if architecture == Architecture.I386:
@@ -49,7 +64,7 @@ def make(system: System, architecture: Architecture, debug: bool = False):
 
     execute(
         ["go", "build", *flags, "-buildmode=c-shared", "-o", f"/build/{target_name}.{extension}", sources],
-        {"CC": compiler, "GOOS": goos, "GOARCH": goarch, "CGO_ENABLED": "1"}
+        {"CC": compiler, "GOOS": goos, "GOARCH": goarch, "CGO_ENABLED": "1", **environ}
     )
 
     with open(f"/build/{target_name}.h", "r") as f:

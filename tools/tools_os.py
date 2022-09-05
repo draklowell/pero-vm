@@ -6,6 +6,13 @@ from typing import Dict, List
 
 def execute(cmd: List[str], environ: Dict[str, str]):
     print(" ".join(cmd))
+
+    env_text = []
+    for name, value in environ.items():
+        env_text.append(f"{name}={value}")
+    env_text = " ".join(env_text)
+    print(f"[ENV: {env_text}]")
+
     sys.stdout.flush()
     sleep(0.1)
     env = os.environ.copy()

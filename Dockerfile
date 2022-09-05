@@ -18,7 +18,13 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 RUN apt-get install -y python3
 RUN apt-get install -y gcc
 RUN apt-get install -y gcc-multilib
-RUN apt-get install -y gcc-mingw-w64
+RUN apt-get install -y gcc-mingw-w64-x86-64
+RUN apt-get install -y gcc-arm-linux-gnueabi
+RUN apt-get install -y binutils-arm-linux-gnueabi
+RUN apt-get install -y gcc-aarch64-linux-gnu
+RUN apt-get install -y binutils-aarch64-linux-gnu
+
+# TODO: Fix arm-i386 conflict + darwin cross compile
 
 FROM builder
 
