@@ -6,9 +6,6 @@ services:
 before_script:
   - apk update && apk add make
 
-after_script:
-  - make clean
-
 build:
   stage: build
   script:
