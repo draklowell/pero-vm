@@ -1,5 +1,8 @@
 image: docker:20.10.16
 
+only:
+  - tags
+
 services:
   - docker:20.10.16-dind
 
