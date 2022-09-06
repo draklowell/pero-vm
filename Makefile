@@ -12,6 +12,7 @@ ifndef ARCH
 endif
 
 CONTAINER_TAG := rrt-builder
+VERSION := `cat VERSION`
 
 all: clean build
 
@@ -35,4 +36,4 @@ summary:
 
 tag:
 	@echo "Add tag: '$(VERSION)'"
-	git tag v$(VERSIONVERSION)
+	git tag $(VERSION)
