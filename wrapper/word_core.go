@@ -1,7 +1,7 @@
 package main
 
 import (
-	"lab.draklowell.net/routine-runtime/common/word"
+	"lab.draklowell.net/pero-core/common/word"
 )
 
 import "C"
@@ -35,8 +35,8 @@ func GoWordList(vm *VM, list *Pointer, size C.int) ([]word.Word, error) {
 	return result, nil
 }
 
-//export rrtWordFree
-func rrtWordFree(vmPtr Pointer, wordPtr Pointer) C.int {
+//export peroWordFree
+func peroWordFree(vmPtr Pointer, wordPtr Pointer) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -52,8 +52,8 @@ func rrtWordFree(vmPtr Pointer, wordPtr Pointer) C.int {
 	return 0
 }
 
-//export rrtWordDuplicate
-func rrtWordDuplicate(vmPtr Pointer, wordPtr Pointer) Pointer {
+//export peroWordDuplicate
+func peroWordDuplicate(vmPtr Pointer, wordPtr Pointer) Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -75,8 +75,8 @@ func rrtWordDuplicate(vmPtr Pointer, wordPtr Pointer) Pointer {
 	return newPtr
 }
 
-//export rrtWordType
-func rrtWordType(vmPtr Pointer, wordPtr Pointer) C.int {
+//export peroWordType
+func peroWordType(vmPtr Pointer, wordPtr Pointer) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)

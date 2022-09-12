@@ -12,7 +12,7 @@ ifndef ARCH
 endif
 
 PLATFORM = $(OS)-$(ARCH)
-CONTAINER_TAG := rrt-$(PLATFORM)
+CONTAINER_TAG := pero-$(PLATFORM)
 VERSION := `cat VERSION`
 
 all: clean build
@@ -54,7 +54,7 @@ clean:
 	rm -rf build
 
 summary:
-	cloc common/ internal/ loader/ rrt/ wrapper/ tools/
+	cloc common/ internal/ loader/ pero/ wrapper/ tools/
 
 tag:
 	@echo "Add tag: '$(VERSION)'"

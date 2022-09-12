@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"lab.draklowell.net/routine-runtime/common/word"
+	"lab.draklowell.net/pero-core/common/word"
 )
 
 const blockSize = 1024

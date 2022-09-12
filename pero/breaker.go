@@ -1,6 +1,6 @@
-package rrt
+package pero
 
-import "lab.draklowell.net/routine-runtime/internal"
+import "lab.draklowell.net/pero-core/internal"
 
 type Breaker func() bool
 

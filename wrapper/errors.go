@@ -10,8 +10,8 @@ func throw(err error) {
 	errorMap[getThreadId()] = err
 }
 
-//export rrtGetError
-func rrtGetError() *C.char {
+//export peroGetError
+func peroGetError() *C.char {
 	return C.CString(errorMap[getThreadId()].Error())
 }
 

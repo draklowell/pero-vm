@@ -1,18 +1,18 @@
 package main
 
 import (
-	"lab.draklowell.net/routine-runtime/common/word"
-	"lab.draklowell.net/routine-runtime/rrt"
+	"lab.draklowell.net/pero-core/common/word"
+	"lab.draklowell.net/pero-core/pero"
 )
 
 //#include <types.h>
 import "C"
 
 type nativeRoutineWrapper struct {
-	base C.rrtNativeRoutine
+	base C.peroNativeRoutine
 }
 
-func (nrw *nativeRoutineWrapper) Run(machine *rrt.VirtualMachine, arguments []word.Word) ([]word.Word, error) {
+func (nrw *nativeRoutineWrapper) Run(machine *pero.VirtualMachine, arguments []word.Word) ([]word.Word, error) {
 	vmPtr := vms.Find(
 		func(value *VM) bool {
 			return value != nil && value.machine == machine
@@ -36,7 +36,7 @@ func (nrw *nativeRoutineWrapper) Run(machine *rrt.VirtualMachine, arguments []wo
 	ptrArgumentsPtr := CArray(ptrArguments, &ptrArgumentSize)
 
 	var cRetSize C.int = 0
-	cRet, err := C.rrtNativeRoutineBridge(
+	cRet, err := C.peroNativeRoutineBridge(
 		nrw.base,
 		C.int(vmPtr),
 		ptrArgumentsPtr,
@@ -67,8 +67,8 @@ func (nrw *nativeRoutineWrapper) Run(machine *rrt.VirtualMachine, arguments []wo
 	return rets, nil
 }
 
-//export rrtVMAddNativeRoutine
-func rrtVMAddNativeRoutine(vmPtr Pointer, entry *C.char, routine C.rrtNativeRoutine) C.int {
+//export peroVMAddNativeRoutine
+func peroVMAddNativeRoutine(vmPtr Pointer, entry *C.char, routine C.peroNativeRoutine) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)

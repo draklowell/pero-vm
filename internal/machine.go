@@ -4,7 +4,7 @@ import (
 	"runtime"
 	"strings"
 
-	"lab.draklowell.net/routine-runtime/common/word"
+	"lab.draklowell.net/pero-core/common/word"
 )
 
 const (

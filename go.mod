@@ -1,3 +1,3 @@
-module lab.draklowell.net/routine-runtime
+module lab.draklowell.net/pero-core
 
 go 1.19

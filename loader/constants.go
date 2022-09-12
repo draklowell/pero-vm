@@ -1,8 +1,8 @@
 package loader
 
 import (
-	"lab.draklowell.net/routine-runtime/common/word"
-	"lab.draklowell.net/routine-runtime/internal/context"
+	"lab.draklowell.net/pero-core/common/word"
+	"lab.draklowell.net/pero-core/internal/context"
 )
 
 func loadConstants(reader *Reader) ([]context.Constant, error) {

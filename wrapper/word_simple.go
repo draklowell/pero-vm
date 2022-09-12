@@ -1,11 +1,11 @@
 package main
 
-import "lab.draklowell.net/routine-runtime/common/word"
+import "lab.draklowell.net/pero-core/common/word"
 
 import "C"
 
-//export rrtWordIntegerNew
-func rrtWordIntegerNew(vmPtr Pointer, value C.long) Pointer {
+//export peroWordIntegerNew
+func peroWordIntegerNew(vmPtr Pointer, value C.long) Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -26,8 +26,8 @@ func rrtWordIntegerNew(vmPtr Pointer, value C.long) Pointer {
 	return integerPtr
 }
 
-//export rrtWordIntegerGetValue
-func rrtWordIntegerGetValue(vmPtr Pointer, integerPtr Pointer, result *C.long) C.int {
+//export peroWordIntegerGetValue
+func peroWordIntegerGetValue(vmPtr Pointer, integerPtr Pointer, result *C.long) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -50,8 +50,8 @@ func rrtWordIntegerGetValue(vmPtr Pointer, integerPtr Pointer, result *C.long) C
 	return 0
 }
 
-//export rrtWordFloatNew
-func rrtWordFloatNew(vmPtr Pointer, value C.double) Pointer {
+//export peroWordFloatNew
+func peroWordFloatNew(vmPtr Pointer, value C.double) Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -72,8 +72,8 @@ func rrtWordFloatNew(vmPtr Pointer, value C.double) Pointer {
 	return floatPtr
 }
 
-//export rrtWordFloatGetValue
-func rrtWordFloatGetValue(vmPtr Pointer, floatPtr Pointer, result *C.double) C.int {
+//export peroWordFloatGetValue
+func peroWordFloatGetValue(vmPtr Pointer, floatPtr Pointer, result *C.double) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -96,8 +96,8 @@ func rrtWordFloatGetValue(vmPtr Pointer, floatPtr Pointer, result *C.double) C.i
 	return 0
 }
 
-//export rrtWordBooleanNew
-func rrtWordBooleanNew(vmPtr Pointer, value C.char) Pointer {
+//export peroWordBooleanNew
+func peroWordBooleanNew(vmPtr Pointer, value C.char) Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -124,18 +124,18 @@ func rrtWordBooleanNew(vmPtr Pointer, value C.char) Pointer {
 	return booleanPtr
 }
 
-//export rrtWordTrue
-func rrtWordTrue(vmPtr Pointer) Pointer {
-	return rrtWordBooleanNew(vmPtr, 1)
+//export peroWordTrue
+func peroWordTrue(vmPtr Pointer) Pointer {
+	return peroWordBooleanNew(vmPtr, 1)
 }
 
-//export rrtWordFalse
-func rrtWordFalse(vmPtr Pointer) Pointer {
-	return rrtWordBooleanNew(vmPtr, 0)
+//export peroWordFalse
+func peroWordFalse(vmPtr Pointer) Pointer {
+	return peroWordBooleanNew(vmPtr, 0)
 }
 
-//export rrtWordBooleanGetValue
-func rrtWordBooleanGetValue(vmPtr Pointer, booleanPtr Pointer, result *C.char) C.int {
+//export peroWordBooleanGetValue
+func peroWordBooleanGetValue(vmPtr Pointer, booleanPtr Pointer, result *C.char) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -162,8 +162,8 @@ func rrtWordBooleanGetValue(vmPtr Pointer, booleanPtr Pointer, result *C.char) C
 	return 0
 }
 
-//export rrtWordNone
-func rrtWordNone(vmPtr Pointer) Pointer {
+//export peroWordNone
+func peroWordNone(vmPtr Pointer) Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)

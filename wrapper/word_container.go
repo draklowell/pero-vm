@@ -1,13 +1,13 @@
 package main
 
 import (
-	"lab.draklowell.net/routine-runtime/common/word"
+	"lab.draklowell.net/pero-core/common/word"
 )
 
 import "C"
 
-//export rrtWordContainerNew
-func rrtWordContainerNew(vmPtr Pointer) Pointer {
+//export peroWordContainerNew
+func peroWordContainerNew(vmPtr Pointer) Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -28,8 +28,8 @@ func rrtWordContainerNew(vmPtr Pointer) Pointer {
 	return containerPtr
 }
 
-//export rrtWordContainerGet
-func rrtWordContainerGet(vmPtr Pointer, containerPtr Pointer, key *C.char) Pointer {
+//export peroWordContainerGet
+func peroWordContainerGet(vmPtr Pointer, containerPtr Pointer, key *C.char) Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -62,8 +62,8 @@ func rrtWordContainerGet(vmPtr Pointer, containerPtr Pointer, key *C.char) Point
 	return elementPtr
 }
 
-//export rrtWordContainerSet
-func rrtWordContainerSet(vmPtr Pointer, containerPtr Pointer, key *C.char, elementPtr Pointer) C.int {
+//export peroWordContainerSet
+func peroWordContainerSet(vmPtr Pointer, containerPtr Pointer, key *C.char, elementPtr Pointer) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -97,8 +97,8 @@ func rrtWordContainerSet(vmPtr Pointer, containerPtr Pointer, key *C.char, eleme
 	return 0
 }
 
-//export rrtWordContainerKeysCount
-func rrtWordContainerKeysCount(vmPtr Pointer, containerPtr Pointer) C.int {
+//export peroWordContainerKeysCount
+func peroWordContainerKeysCount(vmPtr Pointer, containerPtr Pointer) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -120,8 +120,8 @@ func rrtWordContainerKeysCount(vmPtr Pointer, containerPtr Pointer) C.int {
 	return C.int(len(container.GetKeys()))
 }
 
-//export rrtWordContainerKey
-func rrtWordContainerKey(vmPtr Pointer, containerPtr Pointer, index C.int) *C.char {
+//export peroWordContainerKey
+func peroWordContainerKey(vmPtr Pointer, containerPtr Pointer, index C.int) *C.char {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)

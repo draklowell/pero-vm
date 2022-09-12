@@ -1,11 +1,11 @@
 package main
 
-import "lab.draklowell.net/routine-runtime/common/word"
+import "lab.draklowell.net/pero-core/common/word"
 
 import "C"
 
-//export rrtWordBytesNew
-func rrtWordBytesNew(vmPtr Pointer, value *C.char, valueSize C.int) Pointer {
+//export peroWordBytesNew
+func peroWordBytesNew(vmPtr Pointer, value *C.char, valueSize C.int) Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -32,8 +32,8 @@ func rrtWordBytesNew(vmPtr Pointer, value *C.char, valueSize C.int) Pointer {
 	return bytesPtr
 }
 
-//export rrtWordBytesGetValue
-func rrtWordBytesGetValue(vmPtr Pointer, bytesPtr Pointer, valueSize *C.int) *C.char {
+//export peroWordBytesGetValue
+func peroWordBytesGetValue(vmPtr Pointer, bytesPtr Pointer, valueSize *C.int) *C.char {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)

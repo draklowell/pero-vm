@@ -1,10 +1,10 @@
-package rrt
+package pero
 
 import (
 	"bytes"
 
-	"lab.draklowell.net/routine-runtime/internal/contrib"
-	"lab.draklowell.net/routine-runtime/loader"
+	"lab.draklowell.net/pero-core/internal/contrib"
+	"lab.draklowell.net/pero-core/loader"
 )
 
 func (vm *VirtualMachine) AddStaticRoutine(data []byte) (string, error) {

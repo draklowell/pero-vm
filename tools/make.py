@@ -8,8 +8,8 @@ import os
 def make(system: System, architecture: Architecture, debug: bool = False):
     with open("VERSION", "r") as f:
         version = f.read().strip()
-    sources = "lab.draklowell.net/routine-runtime/wrapper/"
-    name = f"routine-runtime-{version}"
+    sources = "lab.draklowell.net/pero-core/wrapper/"
+    name = f"pero-{version}"
 
     platform = f"{system.value}-{architecture.value}"
     environ = {}

@@ -1,22 +1,22 @@
 package main
 
 import (
-	"lab.draklowell.net/routine-runtime/common/word"
-	"lab.draklowell.net/routine-runtime/rrt"
+	"lab.draklowell.net/pero-core/common/word"
+	"lab.draklowell.net/pero-core/pero"
 )
 
 //#include <types.h>
 import "C"
 
 type VM struct {
-	machine *rrt.VirtualMachine
+	machine *pero.VirtualMachine
 	words   PointerSet[word.Word]
 }
 
 var vms, _ = NewPointerSet[*VM](128)
 
-//export rrtVMNew
-func rrtVMNew(name *C.char, wordPointerSetSize C.int, stackSize C.int, heapSize C.int, gcMode C.int) Pointer {
+//export peroVMNew
+func peroVMNew(name *C.char, wordPointerSetSize C.int, stackSize C.int, heapSize C.int, gcMode C.int) Pointer {
 	wordsCache, err := NewPointerSet[word.Word](int(wordPointerSetSize))
 	if err != nil {
 		throw(err)
@@ -24,7 +24,7 @@ func rrtVMNew(name *C.char, wordPointerSetSize C.int, stackSize C.int, heapSize 
 	}
 
 	ptr, err := vms.Add(&VM{
-		machine: rrt.NewVirtualMachine(
+		machine: pero.NewVirtualMachine(
 			C.GoString(name),
 			uint(stackSize),
 			uint(heapSize),
@@ -40,8 +40,8 @@ func rrtVMNew(name *C.char, wordPointerSetSize C.int, stackSize C.int, heapSize 
 	return ptr
 }
 
-//export rrtVMClose
-func rrtVMClose(vmPtr Pointer) C.int {
+//export peroVMClose
+func peroVMClose(vmPtr Pointer) C.int {
 	err := vms.Remove(vmPtr)
 	if err != nil {
 		throw(err)
@@ -50,8 +50,8 @@ func rrtVMClose(vmPtr Pointer) C.int {
 	return 0
 }
 
-//export rrtVMRemoveRoutine
-func rrtVMRemoveRoutine(vmPtr Pointer, entry *C.char) C.int {
+//export peroVMRemoveRoutine
+func peroVMRemoveRoutine(vmPtr Pointer, entry *C.char) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -62,8 +62,8 @@ func rrtVMRemoveRoutine(vmPtr Pointer, entry *C.char) C.int {
 	return 0
 }
 
-//export rrtVMInvoke
-func rrtVMInvoke(vmPtr Pointer, entry *C.char, arguments *Pointer, argumentSize C.int, retSize *C.int) *Pointer {
+//export peroVMInvoke
+func peroVMInvoke(vmPtr Pointer, entry *C.char, arguments *Pointer, argumentSize C.int, retSize *C.int) *Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)

@@ -1,26 +1,26 @@
-#ifndef __rrt_types
-#define __rrt_types
+#ifndef __pero_types
+#define __pero_types
 
-#define rrtNullPointer -1
-#define rrtGCFrequent 0
-#define rrtGCRare 1
-#define rrtTypeNone 0
-#define rrtTypeInteger 1
-#define rrtTypeFloat 2
-#define rrtTypeArray 3
-#define rrtTypeContainer 4
-#define rrtTypeBytes 5
-#define rrtTypeBoolean 6
+#define peroNullPointer -1
+#define peroGCFrequent 0
+#define peroGCRare 1
+#define peroTypeNone 0
+#define peroTypeInteger 1
+#define peroTypeFloat 2
+#define peroTypeArray 3
+#define peroTypeContainer 4
+#define peroTypeBytes 5
+#define peroTypeBoolean 6
 
-typedef unsigned char (*rrtBreaker) ();
+typedef unsigned char (*peroBreaker) ();
 
-typedef struct rrtDynamicRoutine { void* data; int length; } rrtDynamicRoutine;
-typedef rrtDynamicRoutine* (*rrtDynamicLoader) (char* entry);
+typedef struct peroDynamicRoutine { void* data; int length; } peroDynamicRoutine;
+typedef peroDynamicRoutine* (*peroDynamicLoader) (char* entry);
 
-typedef int* (*rrtNativeRoutine) (int vmPtr, int* arguments, int argumentSize, int* retSize);
+typedef int* (*peroNativeRoutine) (int vmPtr, int* arguments, int argumentSize, int* retSize);
 
-static unsigned char rrtBreakerBridge(rrtBreaker f) { return f(); }
-static rrtDynamicRoutine* rrtDynamicLoaderBridge(rrtDynamicLoader f, char* entry) { return f(entry); }
-static int* rrtNativeRoutineBridge(rrtNativeRoutine f, int vmPtr, int* arguments, int argumentSize, int* retSize) { return f(vmPtr, arguments, argumentSize, retSize); }
+static unsigned char peroBreakerBridge(peroBreaker f) { return f(); }
+static peroDynamicRoutine* peroDynamicLoaderBridge(peroDynamicLoader f, char* entry) { return f(entry); }
+static int* peroNativeRoutineBridge(peroNativeRoutine f, int vmPtr, int* arguments, int argumentSize, int* retSize) { return f(vmPtr, arguments, argumentSize, retSize); }
 
 #endif

@@ -4,19 +4,19 @@ package main
 import "C"
 
 type breakerWrapper struct {
-	base C.rrtBreaker
+	base C.peroBreaker
 }
 
 func (bw *breakerWrapper) Run() bool {
-	if uint8(C.rrtBreakerBridge(bw.base)) > 0 {
+	if uint8(C.peroBreakerBridge(bw.base)) > 0 {
 		return true
 	} else {
 		return false
 	}
 }
 
-//export rrtVMSetBreaker
-func rrtVMSetBreaker(vmPtr Pointer, breaker C.rrtBreaker) C.int {
+//export peroVMSetBreaker
+func peroVMSetBreaker(vmPtr Pointer, breaker C.peroBreaker) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -28,8 +28,8 @@ func rrtVMSetBreaker(vmPtr Pointer, breaker C.rrtBreaker) C.int {
 	return 0
 }
 
-//export rrtVMRemoveBreaker
-func rrtVMRemoveBreaker(vmPtr Pointer) C.int {
+//export peroVMRemoveBreaker
+func peroVMRemoveBreaker(vmPtr Pointer) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)

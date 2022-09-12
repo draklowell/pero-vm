@@ -1,6 +1,6 @@
 package context
 
-import "lab.draklowell.net/routine-runtime/common/word"
+import "lab.draklowell.net/pero-core/common/word"
 
 func (ctx *Context) commandContainerNew() error {
 	container, err := ctx.machine.Heap.NewContainer()

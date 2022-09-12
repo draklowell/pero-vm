@@ -6,11 +6,11 @@ import (
 	"bytes"
 	"unsafe"
 
-	"lab.draklowell.net/routine-runtime/rrt"
+	"lab.draklowell.net/pero-core/pero"
 )
 
-//export rrtVMAddStaticRoutine
-func rrtVMAddStaticRoutine(vmPtr Pointer, data unsafe.Pointer, dataSize C.int) *C.char {
+//export peroVMAddStaticRoutine
+func peroVMAddStaticRoutine(vmPtr Pointer, data unsafe.Pointer, dataSize C.int) *C.char {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -27,11 +27,11 @@ func rrtVMAddStaticRoutine(vmPtr Pointer, data unsafe.Pointer, dataSize C.int) *
 }
 
 type loaderWrapper struct {
-	base C.rrtDynamicLoader
+	base C.peroDynamicLoader
 }
 
-func (lw *loaderWrapper) GetRoutine(entry string) (*rrt.DynamicRoutine, error) {
-	routine, err := C.rrtDynamicLoaderBridge(lw.base, C.CString(entry))
+func (lw *loaderWrapper) GetRoutine(entry string) (*pero.DynamicRoutine, error) {
+	routine, err := C.peroDynamicLoaderBridge(lw.base, C.CString(entry))
 	if err != nil {
 		return nil, err
 	}
@@ -40,15 +40,15 @@ func (lw *loaderWrapper) GetRoutine(entry string) (*rrt.DynamicRoutine, error) {
 		return nil, nil
 	}
 
-	return rrt.LoadDynamicRoutine(
+	return pero.LoadDynamicRoutine(
 		bytes.NewReader(
 			C.GoBytes(routine.data, routine.length),
 		),
 	)
 }
 
-//export rrtVMAddDynamicLoader
-func rrtVMAddDynamicLoader(vmPtr Pointer, loader C.rrtDynamicLoader) C.int {
+//export peroVMAddDynamicLoader
+func peroVMAddDynamicLoader(vmPtr Pointer, loader C.peroDynamicLoader) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -64,8 +64,8 @@ func rrtVMAddDynamicLoader(vmPtr Pointer, loader C.rrtDynamicLoader) C.int {
 	return C.int(index)
 }
 
-//export rrtVMRemoveDynamicLoader
-func rrtVMRemoveDynamicLoader(vmPtr Pointer, index C.int) C.int {
+//export peroVMRemoveDynamicLoader
+func peroVMRemoveDynamicLoader(vmPtr Pointer, index C.int) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)

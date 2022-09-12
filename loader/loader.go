@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"io"
 
-	"lab.draklowell.net/routine-runtime/internal/context"
+	"lab.draklowell.net/pero-core/internal/context"
 )
 
 const Version = 1

@@ -23,7 +23,7 @@ def make_header(header: str, types: str, system: System, architecture: Architect
 
         result += line + "\n"
 
-    result += "#ifndef __rrt_methods\n"
+    result += "#ifndef __pero_methods\n"
 
     skip = True
     skip_cplusplus = False
@@ -56,6 +56,6 @@ def make_header(header: str, types: str, system: System, architecture: Architect
 
         result += line + "\n"
 
-    result += "#define __rrt_methods\n#endif\n#ifdef __cplusplus\n}\n#endif\n"
+    result += "#define __pero_methods\n#endif\n#ifdef __cplusplus\n}\n#endif\n"
 
     return result

@@ -1,11 +1,11 @@
-package rrt
+package pero
 
 import (
 	"encoding/binary"
 	"io"
 
-	"lab.draklowell.net/routine-runtime/internal/context"
-	"lab.draklowell.net/routine-runtime/loader"
+	"lab.draklowell.net/pero-core/internal/context"
+	"lab.draklowell.net/pero-core/loader"
 )
 
 type Loader interface {

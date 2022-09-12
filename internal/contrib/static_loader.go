@@ -3,7 +3,7 @@ package contrib
 import (
 	"encoding/binary"
 
-	"lab.draklowell.net/routine-runtime/internal/context"
+	"lab.draklowell.net/pero-core/internal/context"
 )
 
 type StaticLoader struct {

@@ -3,7 +3,7 @@ package context
 import (
 	"math"
 
-	"lab.draklowell.net/routine-runtime/common/word"
+	"lab.draklowell.net/pero-core/common/word"
 )
 
 func (ctx *Context) commandMathIAdd() error {

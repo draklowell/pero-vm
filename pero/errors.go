@@ -1,10 +1,10 @@
-package rrt
+package pero
 
 import (
 	"errors"
 	"fmt"
 
-	"lab.draklowell.net/routine-runtime/internal/context"
+	"lab.draklowell.net/pero-core/internal/context"
 )
 
 type Unwrapable interface {

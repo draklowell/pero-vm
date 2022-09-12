@@ -3,7 +3,7 @@ package context
 import (
 	"errors"
 
-	"lab.draklowell.net/routine-runtime/common/word"
+	"lab.draklowell.net/pero-core/common/word"
 )
 
 func (ctx *Context) read(size int) ([]byte, error) {

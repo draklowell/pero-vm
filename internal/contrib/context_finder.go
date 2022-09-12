@@ -3,9 +3,9 @@ package contrib
 import (
 	"encoding/binary"
 
-	"lab.draklowell.net/routine-runtime/common/word"
-	"lab.draklowell.net/routine-runtime/internal"
-	"lab.draklowell.net/routine-runtime/internal/context"
+	"lab.draklowell.net/pero-core/common/word"
+	"lab.draklowell.net/pero-core/internal"
+	"lab.draklowell.net/pero-core/internal/context"
 )
 
 type Loader interface {

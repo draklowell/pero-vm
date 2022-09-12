@@ -1,11 +1,11 @@
 package main
 
-import "lab.draklowell.net/routine-runtime/common/word"
+import "lab.draklowell.net/pero-core/common/word"
 
 import "C"
 
-//export rrtWordArrayNew
-func rrtWordArrayNew(vmPtr Pointer, size C.int) Pointer {
+//export peroWordArrayNew
+func peroWordArrayNew(vmPtr Pointer, size C.int) Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -27,8 +27,8 @@ func rrtWordArrayNew(vmPtr Pointer, size C.int) Pointer {
 	return arrayPtr
 }
 
-//export rrtWordArrayGet
-func rrtWordArrayGet(vmPtr Pointer, arrayPtr Pointer, index C.int) Pointer {
+//export peroWordArrayGet
+func peroWordArrayGet(vmPtr Pointer, arrayPtr Pointer, index C.int) Pointer {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -61,8 +61,8 @@ func rrtWordArrayGet(vmPtr Pointer, arrayPtr Pointer, index C.int) Pointer {
 	return elementPtr
 }
 
-//export rrtWordArraySet
-func rrtWordArraySet(vmPtr Pointer, arrayPtr Pointer, index C.int, elementPtr Pointer) C.int {
+//export peroWordArraySet
+func peroWordArraySet(vmPtr Pointer, arrayPtr Pointer, index C.int, elementPtr Pointer) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
@@ -95,8 +95,8 @@ func rrtWordArraySet(vmPtr Pointer, arrayPtr Pointer, index C.int, elementPtr Po
 	return 0
 }
 
-//export rrtWordArrayLength
-func rrtWordArrayLength(vmPtr Pointer, arrayPtr Pointer) C.int {
+//export peroWordArrayLength
+func peroWordArrayLength(vmPtr Pointer, arrayPtr Pointer) C.int {
 	vm, err := vms.Get(vmPtr)
 	if err != nil {
 		throw(err)
