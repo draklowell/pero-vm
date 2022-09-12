@@ -1,6 +1,6 @@
 #ifndef __pero_types
 
-#define peroVersion "22s0906"
+#define peroVersion "22s0912"
 
 #define peroNullPointer -1
 #define peroGCFrequent 0
