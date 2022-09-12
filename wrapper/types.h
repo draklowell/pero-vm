@@ -1,5 +1,6 @@
 #ifndef __pero_types
-#define __pero_types
+
+#define peroVersion "22s0906"
 
 #define peroNullPointer -1
 #define peroGCFrequent 0
@@ -23,4 +24,5 @@ static unsigned char peroBreakerBridge(peroBreaker f) { return f(); }
 static peroDynamicRoutine* peroDynamicLoaderBridge(peroDynamicLoader f, char* entry) { return f(entry); }
 static int* peroNativeRoutineBridge(peroNativeRoutine f, int vmPtr, int* arguments, int argumentSize, int* retSize) { return f(vmPtr, arguments, argumentSize, retSize); }
 
+#define __pero_types
 #endif

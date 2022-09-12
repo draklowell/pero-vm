@@ -15,6 +15,11 @@ type VM struct {
 
 var vms, _ = NewPointerSet[*VM](128)
 
+//export peroGetVersion
+func peroGetVersion() *C.char {
+	return C.CString(pero.Version)
+}
+
 //export peroVMNew
 func peroVMNew(name *C.char, wordPointerSetSize C.int, stackSize C.int, heapSize C.int, gcMode C.int) Pointer {
 	wordsCache, err := NewPointerSet[word.Word](int(wordPointerSetSize))
