@@ -6,20 +6,6 @@ import os
 
 
 def make(system: System, architecture: Architecture, debug: bool = False):
-    if system == System.ALL:
-        make(System.LINUX, architecture, debug)
-        make(System.DARWIN, architecture, debug)
-        make(System.WINDOWS, architecture, debug)
-        return
-    
-    if architecture == Architecture.ALL:
-        make(system, Architecture.AMD64, debug)
-        make(system, Architecture.ARM64, debug)
-        make(system, Architecture.ARM, debug)
-        if system != System.DARWIN:
-            make(system, Architecture.I386, debug)
-        return
-
     with open("VERSION", "r") as f:
         version = f.read().strip()
     sources = "lab.draklowell.net/routine-runtime/wrapper/"
@@ -27,16 +13,26 @@ def make(system: System, architecture: Architecture, debug: bool = False):
 
     platform = f"{system.value}-{architecture.value}"
     environ = {}
+    compiler_flags = []
+    compiler = None
+    extension = None
+    linker_flags = []
+    go_flags = []
     if system == System.WINDOWS:
         if architecture == Architecture.AMD64:
             platform = "win64"
             compiler = "x86_64-w64-mingw32-gcc"
+        elif architecture == Architecture.I386:
+            platform = "win32"
+            compiler = "i686-w64-mingw32-gcc"
         else:
             print(f"Unsupported platform: {system.value}, {architecture.value}")
             return
         extension = "dll"
     elif system == System.LINUX:
         if architecture == Architecture.AMD64:
+            compiler = "gcc"
+        elif architecture == Architecture.I386:
             compiler = "gcc"
         elif architecture == Architecture.ARM64:
             compiler = "aarch64-linux-gnu-gcc"
@@ -58,13 +54,16 @@ def make(system: System, architecture: Architecture, debug: bool = False):
     else:
         goarch = architecture.value
 
-    flags = []
     if not debug:
-        flags.append('-ldflags=-s -w')
+        linker_flags.append('-s')
+        linker_flags.append('-w')
 
     execute(
-        ["go", "build", *flags, "-buildmode=c-shared", "-o", f"/build/{target_name}.{extension}", sources],
-        {"CC": compiler, "GOOS": goos, "GOARCH": goarch, "CGO_ENABLED": "1", **environ}
+        ["go", "build", *go_flags, "-buildmode=c-shared", "-o", f"/build/{target_name}.{extension}", sources],
+        {
+            "CC": compiler, "GOOS": goos, "GOARCH": goarch, "CGO_ENABLED": "1", **environ,
+            "CGO_CFLAGS": " ".join(compiler_flags), "CGO_LDFLAGS": " ".join(linker_flags),
+        }
     )
 
     with open(f"/build/{target_name}.h", "r") as f:

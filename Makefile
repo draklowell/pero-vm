@@ -5,28 +5,50 @@ ifdef DEBUG
 endif
 
 ifndef OS
-  OS := all
+  OS := linux
 endif
 ifndef ARCH
-  ARCH := all
+  ARCH := amd64
 endif
 
-CONTAINER_TAG := rrt-builder
+PLATFORM = $(OS)-$(ARCH)
+CONTAINER_TAG := rrt-$(PLATFORM)
 VERSION := `cat VERSION`
 
 all: clean build
 
-build:
-	mkdir build
+build-all:
+	OS=all ARCH=all make
 
-	docker build --tag $(CONTAINER_TAG) .
+ifeq ($(OS),all)
+build:
+	OS=windows make -B build
+	OS=linux make -B build
+else ifeq ($(ARCH),all)
+  ifeq ($(OS),linux)
+  build:
+	ARCH=amd64 make -B build
+	ARCH=i386 make -B build
+	ARCH=arm64 make -B build
+	ARCH=arm make -B build
+  else ifeq ($(OS),windows)
+  build:
+	ARCH=amd64 make -B build
+	ARCH=i386 make -B build
+  endif
+else
+build:
+	mkdir -p build
+
+	docker build --tag $(CONTAINER_TAG) --target builder-$(PLATFORM) .
 
 	@echo Using container $(CONTAINER_TAG)
 
 	docker run --rm \
 		--mount type=bind,source=$(CURRENT_DIR)/build,target=/build \
-		-e OS=$(OS) -e ARCH=$(ARCH) $(DEBUG_FLAG) \
+		$(DEBUG_FLAG) \
 		$(CONTAINER_TAG)
+endif
 
 clean:
 	rm -rf build
