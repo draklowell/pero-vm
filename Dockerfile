@@ -1,5 +1,5 @@
 # Generic builder:
-FROM ubuntu:22.04 as builder-base
+FROM ubuntu:18.04 as builder-base
 
 RUN apt-get update
 RUN apt-get install -y wget
