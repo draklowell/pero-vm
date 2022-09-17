@@ -1,6 +1,8 @@
 package main
 
 import (
+	"unsafe"
+
 	"lab.draklowell.net/pero-core/common/word"
 )
 
@@ -33,6 +35,23 @@ func GoWordList(vm *VM, list *Pointer, size C.int) ([]word.Word, error) {
 	}
 
 	return result, nil
+}
+
+//export peroWordId
+func peroWordId(vmPtr Pointer, wordPtr Pointer) C.long {
+	vm, err := vms.Get(vmPtr)
+	if err != nil {
+		throw(err)
+		return -1
+	}
+
+	value, err := vm.words.Get(Pointer(wordPtr))
+	if err != nil {
+		throw(err)
+		return -1
+	}
+
+	return C.long(uintptr(unsafe.Pointer(&value)))
 }
 
 //export peroWordFree
