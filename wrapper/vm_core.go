@@ -21,7 +21,7 @@ func peroGetVersion() *C.char {
 }
 
 //export peroVMNew
-func peroVMNew(name *C.char, wordPointerSetSize C.int, stackSize C.int, heapSize C.int, gcMode C.int) Pointer {
+func peroVMNew(name *C.char, wordPointerSetSize C.int, stackSize C.long, heapSize C.long, gcMode C.int) Pointer {
 	wordsCache, err := NewPointerSet[word.Word](int(wordPointerSetSize))
 	if err != nil {
 		throw(err)
